@@ -1,17 +1,27 @@
-import Image from "next/image";
+// using a native video element for the background to allow autoplayed muted loop
 
 export default function HeroSection() {
     return (
 
         <section className="relative min-h-screen flex items-end justify-center overflow-hidden">
-            {/* Background Image */}
+            {/* Background Video */}
             <div className="absolute inset-0 z-0">
-                <Image src="/hero-image.jpg" alt="Beautiful Bali Landscape" layout="fill" objectFit="cover" />
+                <video
+                    className="absolute inset-0 w-full h-full object-cover"
+                    poster="/hero-image.jpg"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    aria-hidden="true"
+                >
+                    <source src="/2949519-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+                    {/* Fallback to poster image for browsers that don't support video */}
+                </video>
+
                 {/* Gradient Overlays for better content visibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div
-                    className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
-                </div>
+                <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
             </div>
 
             {/* Hero Content - Positioned towards bottom */}
