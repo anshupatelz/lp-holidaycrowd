@@ -1,6 +1,152 @@
+'use client';
+
 import Image from "next/image";
+import { useState, useEffect, useRef } from 'react';
 
 export default function FamousAttractionsSection() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const trackRef = useRef<HTMLDivElement>(null);
+    const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const totalSlides = 6;
+
+    // Get slides per view based on screen size
+    const getSlidesPerView = () => {
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth >= 1024) return 3; // Desktop
+            if (window.innerWidth >= 768) return 2; // Tablet
+        }
+        return 1; // Mobile
+    };
+
+    const [slidesPerView, setSlidesPerView] = useState(1);
+
+    useEffect(() => {
+        setSlidesPerView(getSlidesPerView());
+    }, []);
+
+    const updateCarousel = (instant = false) => {
+        if (trackRef.current) {
+            const slideWidth = 100 / slidesPerView;
+            const offset = currentIndex * slideWidth;
+
+            if (instant) {
+                trackRef.current.style.transition = 'none';
+            } else {
+                trackRef.current.style.transition = 'transform 500ms ease-out';
+            }
+
+            trackRef.current.style.transform = `translateX(-${offset}%)`;
+        }
+    };
+
+    const nextAttraction = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+
+        setCurrentIndex(prev => {
+            const newIndex = prev + 1;
+            if (newIndex >= totalSlides) {
+                setTimeout(() => {
+                    setCurrentIndex(0);
+                    updateCarousel(true);
+                    setTimeout(() => setIsTransitioning(false), 50);
+                }, 500);
+                return newIndex;
+            } else {
+                setTimeout(() => setIsTransitioning(false), 500);
+                return newIndex;
+            }
+        });
+    };
+
+    const prevAttraction = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+
+        if (currentIndex === 0) {
+            setCurrentIndex(totalSlides);
+            updateCarousel(true);
+            setTimeout(() => {
+                setCurrentIndex(totalSlides - 1);
+                setTimeout(() => setIsTransitioning(false), 500);
+            }, 50);
+        } else {
+            setCurrentIndex(prev => prev - 1);
+            setTimeout(() => setIsTransitioning(false), 500);
+        }
+    };
+
+    const goToSlide = (index: number) => {
+        if (isTransitioning) return;
+        setCurrentIndex(index);
+        resetAutoPlay();
+    };
+
+    const startAutoPlay = () => {
+        autoPlayIntervalRef.current = setInterval(() => {
+            nextAttraction();
+        }, 5000);
+    };
+
+    const stopAutoPlay = () => {
+        if (autoPlayIntervalRef.current) {
+            clearInterval(autoPlayIntervalRef.current);
+        }
+    };
+
+    const resetAutoPlay = () => {
+        stopAutoPlay();
+        startAutoPlay();
+    };
+
+    // Touch/Swipe support
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        touchEndX.current = e.changedTouches[0].screenX;
+        if (touchEndX.current < touchStartX.current - 50) {
+            nextAttraction();
+            resetAutoPlay();
+        }
+        if (touchEndX.current > touchStartX.current + 50) {
+            prevAttraction();
+            resetAutoPlay();
+        }
+    };
+
+    // Update carousel when currentIndex changes
+    useEffect(() => {
+        updateCarousel();
+    }, [currentIndex, slidesPerView]);
+
+    // Start auto-play on mount
+    useEffect(() => {
+        startAutoPlay();
+        return () => stopAutoPlay();
+    }, []);
+
+    // Handle window resize
+    useEffect(() => {
+        let resizeTimeout: NodeJS.Timeout;
+        const handleResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                setSlidesPerView(getSlidesPerView());
+            }, 250);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const actualIndex = currentIndex % totalSlides;
+
     return (
         <section className="py-20 bg-gray-50/30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,9 +168,15 @@ export default function FamousAttractionsSection() {
                 {/* Attractions Carousel */}
                 <div className="relative max-w-7xl mx-auto">
                     {/* Carousel Container */}
-                    <div className="relative overflow-hidden px-1">
+                    <div
+                        className="relative overflow-hidden px-1"
+                        onMouseEnter={stopAutoPlay}
+                        onMouseLeave={startAutoPlay}
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
+                    >
                         {/* Attractions Track */}
-                        <div id="attractions-track" className="flex transition-transform duration-500 ease-out">
+                        <div ref={trackRef} className="flex transition-transform duration-500 ease-out">
 
                             {/* Attraction 1: Ubud Cultural Heart */}
                             <div className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3">
@@ -162,39 +314,33 @@ export default function FamousAttractionsSection() {
                     </div>
 
                     {/* Navigation Arrows */}
-                    <button id="attractions-prev"
+                    <button
+                        onClick={() => { prevAttraction(); resetAutoPlay(); }}
                         className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm hover:bg-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group">
                         <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <button id="attractions-next"
+                    <button
+                        onClick={() => { nextAttraction(); resetAutoPlay(); }}
                         className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm hover:bg-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group">
                         <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
 
                     {/* Indicators */}
                     <div className="flex justify-center gap-2 mt-8">
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-primary transition-all duration-300"
-                            data-index="0"></button>
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"
-                            data-index="1"></button>
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"
-                            data-index="2"></button>
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"
-                            data-index="3"></button>
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"
-                            data-index="4"></button>
-                        <button
-                            className="attractions-indicator w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"
-                            data-index="5"></button>
+                        {[...Array(totalSlides)].map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => goToSlide(index)}
+                                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === actualIndex
+                                    ? 'bg-primary'
+                                    : 'bg-gray-300 hover:bg-gray-400'
+                                    }`}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

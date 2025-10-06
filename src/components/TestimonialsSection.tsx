@@ -1,6 +1,119 @@
+'use client';
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from 'react';
 
 export default function TestimonialsSection() {
+    // Static total testimonials based on markup
+    const totalTestimonials = 6;
+    const trackRef = useRef<HTMLDivElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+    const touchStartX = useRef<number | null>(null);
+
+    const getPerView = () => {
+        if (typeof window === 'undefined') return 1;
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 768) return 2;
+        return 1;
+    };
+
+    const [perView, setPerView] = useState<number>(getPerView());
+    const [currentSlide, setCurrentSlide] = useState<number>(0); // index of group
+
+    // total groups where the slider can start (sliding window)
+    const totalGroups = Math.max(1, totalTestimonials - perView + 1);
+
+    const updateTrack = (instant = false) => {
+        const track = trackRef.current;
+        if (!track) return;
+        const slideWidth = 100 / perView;
+        const offset = currentSlide * slideWidth;
+        track.style.transition = instant ? 'none' : 'transform 500ms ease-in-out';
+        track.style.transform = `translateX(-${offset}%)`;
+    };
+
+    const nextSlide = () => setCurrentSlide(s => Math.min(s + 1, totalGroups - 1));
+    const prevSlide = () => setCurrentSlide(s => Math.max(s - 1, 0));
+    const goTo = (index: number) => setCurrentSlide(Math.max(0, Math.min(index, totalGroups - 1)));
+
+    // autoplay
+    const startAuto = () => {
+        stopAuto();
+        autoPlayRef.current = setInterval(() => {
+            setCurrentSlide(s => (s < totalGroups - 1 ? s + 1 : 0));
+        }, 6000);
+    };
+    const stopAuto = () => {
+        if (autoPlayRef.current) {
+            clearInterval(autoPlayRef.current);
+            autoPlayRef.current = null;
+        }
+    };
+
+    // handle resize
+    useEffect(() => {
+        let t: NodeJS.Timeout;
+        const onResize = () => {
+            clearTimeout(t);
+            t = setTimeout(() => setPerView(getPerView()), 200);
+        };
+        window.addEventListener('resize', onResize);
+        return () => {
+            window.removeEventListener('resize', onResize);
+            clearTimeout(t);
+        };
+    }, []);
+
+    // update track when currentSlide or perView changes
+    useEffect(() => {
+        updateTrack();
+    }, [currentSlide, perView]);
+
+    // autoplay and hover pause
+    useEffect(() => {
+        startAuto();
+        const container = containerRef.current;
+        if (!container) return () => stopAuto();
+
+        const onEnter = () => stopAuto();
+        const onLeave = () => startAuto();
+        container.addEventListener('mouseenter', onEnter);
+        container.addEventListener('mouseleave', onLeave);
+
+        return () => {
+            stopAuto();
+            container.removeEventListener('mouseenter', onEnter);
+            container.removeEventListener('mouseleave', onLeave);
+        };
+    }, [perView, totalGroups]);
+
+    // touch support
+    useEffect(() => {
+        const track = trackRef.current;
+        if (!track) return;
+
+        const onTouchStart = (e: TouchEvent) => {
+            touchStartX.current = e.touches[0].clientX;
+        };
+        const onTouchEnd = (e: TouchEvent) => {
+            if (touchStartX.current == null) return;
+            const endX = e.changedTouches[0].clientX;
+            const diff = touchStartX.current - endX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide(); else prevSlide();
+            }
+            touchStartX.current = null;
+        };
+
+        track.addEventListener('touchstart', onTouchStart);
+        track.addEventListener('touchend', onTouchEnd);
+        return () => {
+            track.removeEventListener('touchstart', onTouchStart);
+            track.removeEventListener('touchend', onTouchEnd);
+        };
+    }, [perView, totalGroups]);
+
     return (
         <section className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,22 +136,27 @@ export default function TestimonialsSection() {
                 {/* Testimonials Carousel */}
                 <div className="relative">
                     {/* Navigation Buttons */}
-                    <button id="testimonial-prev"
+                    <button
+                        onClick={prevSlide}
+                        aria-label="Previous testimonials"
                         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 -ml-6">
                         <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
-                    <button id="testimonial-next"
+                    <button
+                        onClick={nextSlide}
+                        aria-label="Next testimonials"
                         className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 -mr-6">
                         <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
 
                     {/* Carousel Container */}
-                    <div className="testimonials-carousel overflow-hidden">
+                    <div className="testimonials-carousel overflow-hidden" ref={containerRef}>
                         <div id="testimonials-track"
+                            ref={trackRef}
                             className="testimonials-track flex transition-transform duration-500 ease-in-out">
 
                             {/* Testimonial 1 */}
@@ -459,18 +577,14 @@ export default function TestimonialsSection() {
 
                     {/* Carousel Indicators */}
                     <div className="flex justify-center mt-8 space-x-2">
-                        <button
-                            className="testimonial-indicator w-3 h-3 rounded-full bg-primary/30 hover:bg-primary/60 transition-all duration-300 active"
-                            data-slide="0"></button>
-                        <button
-                            className="testimonial-indicator w-3 h-3 rounded-full bg-primary/30 hover:bg-primary/60 transition-all duration-300"
-                            data-slide="1"></button>
-                        <button
-                            className="testimonial-indicator w-3 h-3 rounded-full bg-primary/30 hover:bg-primary/60 transition-all duration-300"
-                            data-slide="2"></button>
-                        <button
-                            className="testimonial-indicator w-3 h-3 rounded-full bg-primary/30 hover:bg-primary/60 transition-all duration-300"
-                            data-slide="3"></button>
+                        {Array.from({ length: Math.max(1, totalGroups) }).map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => goTo(idx)}
+                                className={`w-3 h-3 rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-primary' : 'bg-primary/30 hover:bg-primary/60'}`}
+                                aria-label={`Go to testimonials group ${idx + 1}`}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

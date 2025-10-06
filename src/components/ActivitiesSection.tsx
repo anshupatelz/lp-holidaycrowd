@@ -133,29 +133,7 @@ export default function ActivitiesSection() {
                         </div>
                     </div>
 
-                    {/* Activity 6: Cooking className Experience */}
-                    <div
-                        className="group rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-500 overflow-hidden bg-white">
-                        <div className="flex flex-col md:flex-row">
-                            <div className="flex-shrink-0 w-full md:w-48 h-48 md:h-auto relative overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                                    alt="Cooking className Experience"
-                                    width={800}
-                                    height={600}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                </Image>
-                                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-transparent"></div>
-                            </div>
-                            <div className="flex-1 p-6">
-                                <h3 className="text-xl font-medium text-primary mb-3">Cooking className Experience</h3>
-                                <p className="text-sm font-light text-gray-700 leading-relaxed">
-                                    Learn to prepare traditional Balinese dishes with local families in their homes
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Activity 7: Snorkeling & Diving */}
+                    {/* Activity 6: Snorkeling & Diving */}
                     <div
                         className="group rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-500 overflow-hidden bg-white">
                         <div className="flex flex-col md:flex-row">
@@ -172,28 +150,6 @@ export default function ActivitiesSection() {
                                 <h3 className="text-xl font-medium text-primary mb-3">Snorkeling & Diving</h3>
                                 <p className="text-sm font-light text-gray-700 leading-relaxed">
                                     Explore vibrant coral reefs and swim with tropical marine life in crystal waters
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Activity 8: Instagram Photo Tours */}
-                    <div
-                        className="group rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-500 overflow-hidden bg-white">
-                        <div className="flex flex-col md:flex-row">
-                            <div className="flex-shrink-0 w-full md:w-48 h-48 md:h-auto relative overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                                    alt="Instagram Photo Tours"
-                                    width={800}
-                                    height={600}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                </Image>
-                                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-transparent"></div>
-                            </div>
-                            <div className="flex-1 p-6">
-                                <h3 className="text-xl font-medium text-primary mb-3">Instagram Photo Tours</h3>
-                                <p className="text-sm font-light text-gray-700 leading-relaxed">
-                                    Capture perfect shots at Bali's most photogenic locations with professional guidance
                                 </p>
                             </div>
                         </div>

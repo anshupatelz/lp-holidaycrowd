@@ -1,4 +1,54 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
 export default function FloatingNavigation() {
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    const btnRef = useRef<HTMLButtonElement | null>(null);
+
+    // Close mobile menu when clicking outside
+    useEffect(() => {
+        function handleDocClick(e: MouseEvent) {
+            const target = e.target as Node | null;
+            if (!btnRef.current || !menuRef.current) return;
+            if (!btnRef.current.contains(target) && !menuRef.current.contains(target)) {
+                setMobileOpen(false);
+            }
+        }
+
+        document.addEventListener('click', handleDocClick);
+        return () => document.removeEventListener('click', handleDocClick);
+    }, []);
+
+    // Optional: wire up show-more button if it's on the page (keeps original feature intact)
+    useEffect(() => {
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const additionalPackages = document.getElementById('additional-packages');
+        if (!showMoreBtn || !additionalPackages) return;
+
+        let isExpanded = false;
+        function onShowMoreClick() {
+            if (!additionalPackages) return;
+            if (!isExpanded) {
+                additionalPackages.classList.remove('hidden');
+                (showMoreBtn as HTMLButtonElement).textContent = 'Show Less';
+                isExpanded = true;
+                setTimeout(() => {
+                    additionalPackages.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } else {
+                additionalPackages.classList.add('hidden');
+                (showMoreBtn as HTMLButtonElement).textContent = 'View All Packages';
+                isExpanded = false;
+                (showMoreBtn as HTMLButtonElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        showMoreBtn.addEventListener('click', onShowMoreClick);
+        return () => showMoreBtn.removeEventListener('click', onShowMoreClick);
+    }, []);
+
     return (
         <>
             {/*  Floating Navigation  */}
@@ -36,8 +86,14 @@ export default function FloatingNavigation() {
                         </div>
 
                         {/* Mobile Menu Button  */}
-                        <button id="mobile-menu-btn" className="text-primary hover:text-gray-500 p-2 transition-colors">
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                        <button
+                            ref={btnRef}
+                            onClick={() => setMobileOpen(v => !v)}
+                            className="text-primary hover:text-gray-500 p-2 transition-colors"
+                            aria-expanded={mobileOpen}
+                            aria-controls="mobile-menu"
+                        >
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
@@ -45,8 +101,10 @@ export default function FloatingNavigation() {
                 </div>
 
                 {/* Mobile Menu Dropdown  */}
-                <div id="mobile-menu"
-                    className="hidden md:hidden mt-3 bg-white/95 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100/50 px-6 py-5">
+                <div
+                    id="mobile-menu"
+                    ref={menuRef}
+                    className={`md:hidden mt-3 bg-white/95 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100/50 px-6 py-5 ${mobileOpen ? '' : 'hidden'}`}>
                     <div className="flex flex-col space-y-1">
                         <a href="#"
                             className="text-primary hover:text-gray-500 px-4 py-3 text-sm font-light transition-all duration-300">Home</a>
