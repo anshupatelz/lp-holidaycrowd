@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from 'react';
 
 export default function VideoSection() {
@@ -11,41 +10,43 @@ export default function VideoSection() {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalSrc, setModalSrc] = useState('');
-    const [modalTitle, setModalTitle] = useState('');
-    const [modalDescription, setModalDescription] = useState('');
 
-    const totalReels = 6;
+    const totalReels = 8; // Updated to match available videos
     const getPerView = () => {
         if (typeof window === 'undefined') return 1;
-        if (window.innerWidth >= 1024) return 4; // lg: 4 per view
-        if (window.innerWidth >= 768) return 2; // md: 2 per view
-        return 1; // sm: 1 per view
+        if (window.innerWidth >= 1024) return 4; // Desktop: 4
+        if (window.innerWidth >= 768) return 2;  // Tablet: 2
+        return 1; // Mobile: 1
     };
 
     const [perView, setPerView] = useState(getPerView());
-    const [currentIndex, setCurrentIndex] = useState(0); // current reel index (0..totalReels-1)
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    // video data
-    const videoData: Record<string, { src: string; title: string; description: string }> = {
+    // Video data using actual Bali videos - using video first frame as poster
+    const videoData: Record<string, { src: string }> = {
         video1: {
-            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-            title: '"Temple Hopping Magic"',
-            description: "Watch Sarah's spiritual journey through Bali's most sacred temples, experiencing ancient rituals and breathtaking architecture."
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels1.mp4'
         },
         video2: {
-            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-            title: '"Beach Paradise Found"',
-            description: "See Mike & Jenny's romantic escape to pristine beaches, crystal waters, and unforgettable sunset moments."
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels2.mp4'
         },
         video3: {
-            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-            title: '"Cultural Immersion"',
-            description: "Experience authentic Bali with the Sharma family as they discover local traditions, cuisine, and warm hospitality."
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels3.mp4'
         },
         video4: {
-            src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-            title: '"Adventure Unleashed"',
-            description: "Join Tom's adrenaline-packed week filled with volcano treks, white water rafting, and jungle adventures."
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels4.mp4'
+        },
+        video5: {
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels5.mp4'
+        },
+        video6: {
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels6.mp4'
+        },
+        video7: {
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels7.mp4'
+        },
+        video8: {
+            src: '/bali-videos/Bali-Holidayscrowd-Instagram-Reels8.mp4'
         }
     };
 
@@ -54,11 +55,8 @@ export default function VideoSection() {
         const v = videoData[id];
         if (!v) return;
         setModalSrc(v.src);
-        setModalTitle(v.title);
-        setModalDescription(v.description);
         setModalOpen(true);
         document.body.style.overflow = 'hidden';
-        // set src and play when modal opens (see effect)
     };
 
     const closeVideo = () => {
@@ -104,17 +102,14 @@ export default function VideoSection() {
         if (!trackRef.current) return;
         const track = trackRef.current;
         const children = Array.from(track.children) as HTMLElement[];
-        const idx = Math.max(0, Math.min(currentIndex, children.length - 1));
+        const idx = currentIndex % totalReels;
         const target = children[idx];
         if (!target) return;
         if (instant) track.style.transition = 'none';
         else track.style.transition = 'transform 500ms ease-in-out';
-        // Use pixel offset for precise per-item sliding
         const offset = target.offsetLeft;
         track.style.transform = `translateX(-${offset}px)`;
-        // force reflow after instant remove then restore transition
         if (instant) {
-            // allow next frame to restore transitions
             requestAnimationFrame(() => { track.style.transition = 'transform 500ms ease-in-out'; });
         }
     };
@@ -128,7 +123,7 @@ export default function VideoSection() {
     const startAutoPlay = () => {
         stopAutoPlay();
         autoPlayRef.current = window.setInterval(() => {
-            setCurrentIndex(i => (i + 1) % totalReels);
+            setCurrentIndex(i => i + 1);
         }, 8000);
     };
     const stopAutoPlay = () => {
@@ -139,7 +134,7 @@ export default function VideoSection() {
         startAutoPlay();
         return () => stopAutoPlay();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalReels]);
+    }, []);
 
     // Pause on hover
     useEffect(() => {
@@ -164,17 +159,17 @@ export default function VideoSection() {
             const endX = e.changedTouches[0].clientX; const endY = e.changedTouches[0].clientY;
             const diffX = startX - endX; const diffY = startY - endY;
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                if (diffX > 0) setCurrentIndex(i => (i + 1) % totalReels);
-                else setCurrentIndex(i => (i - 1 + totalReels) % totalReels);
+                if (diffX > 0) setCurrentIndex(i => i + 1);
+                else setCurrentIndex(i => i - 1);
             }
             startX = null; startY = null;
         };
         el.addEventListener('touchstart', onStart);
         el.addEventListener('touchend', onEnd);
         return () => { el.removeEventListener('touchstart', onStart); el.removeEventListener('touchend', onEnd); };
-    }, [totalReels]);
+    }, []);
 
-    // Handle resize -> recalc perView and keep view stable
+    // Handle resize -> recalc perView
     useEffect(() => {
         let t: number | undefined;
         const onResize = () => { if (t) window.clearTimeout(t); t = window.setTimeout(() => setPerView(getPerView()), 200); };
@@ -182,8 +177,14 @@ export default function VideoSection() {
         return () => { window.removeEventListener('resize', onResize); if (t) window.clearTimeout(t); };
     }, []);
 
-    const prevGroup = () => setCurrentIndex(i => (i - 1 + totalReels) % totalReels);
-    const nextGroup = () => setCurrentIndex(i => (i + 1) % totalReels);
+    const prevGroup = () => setCurrentIndex(i => i - 1);
+    const nextGroup = () => setCurrentIndex(i => i + 1);
+
+    // Create array of video items for rendering
+    const videoItems = Object.entries(videoData).map(([id, data]) => ({
+        id,
+        src: data.src
+    }));
 
     return (
         <>
@@ -208,245 +209,35 @@ export default function VideoSection() {
                     <div className="relative">
                         {/* Carousel Container */}
                         <div className="overflow-hidden" ref={carouselRef}>
-                            <div id="reelsCarousel" ref={trackRef} className="flex transition-transform duration-500 ease-in-out" style={{ transform: 'translateX(0px)' }}>
+                            <div ref={trackRef} className="flex transition-transform duration-500 ease-in-out">
+                                {videoItems.map((video) => (
+                                    <div key={video.id} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
+                                        <div className="group cursor-pointer" onClick={() => playVideo(video.id)}>
+                                            <div className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-black">
+                                                {/* Video Thumbnail - Shows first frame */}
+                                                <video
+                                                    src={video.src}
+                                                    className="absolute inset-0 w-full h-full object-cover"
+                                                    muted
+                                                    playsInline
+                                                    preload="metadata"
+                                                />
 
-                                {/* Reel 1: Temple Hopping Magic */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video1')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            {/* Background Image */}
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Temple Hopping Magic" width={800} height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
+                                                {/* Gradient Overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70"></div>
 
-                                            {/* Gradient Overlay */}
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-
-                                            {/* Play Button */}
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
+                                                {/* Play Button */}
+                                                <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
+                                                        <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M8 5v14l11-7z" />
+                                                        </svg>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Temple Hopping Magic</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    Watch Sarah's spiritual journey
-                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                {/* Reel 2: Beach Paradise Found */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video2')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            {/* Background Image */}
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Beach Paradise Found"
-                                                width={800}
-                                                height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
-
-                                            {/* Gradient Overlay */}
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-
-                                            {/* Play Button */}
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Beach Paradise Found</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    See Mike & Jenny's romantic escape
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Reel 3: Cultural Immersion */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video3')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            {/* Background Image */}
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Cultural Immersion"
-                                                width={800}
-                                                height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
-
-                                            {/* Gradient Overlay */}
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-
-                                            {/* Play Button */}
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Cultural Immersion</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    Experience authentic Bali with the Sharma family
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Reel 4: Adventure Unleashed */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video4')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            {/* Background Image */}
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Adventure Unleashed"
-                                                width={800}
-                                                height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
-
-                                            {/* Gradient Overlay */}
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-
-                                            {/* Play Button */}
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Adventure Unleashed</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    Join Tom's adrenaline-packed week
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Additional Reels (Hidden by default) */}
-                                {/* Reel 5: Temple Culture */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video1')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Temple Culture"
-                                                width={800}
-                                                height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Temple Culture</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    Ancient traditions come alive
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Reel 6: Sunset Views */}
-                                <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
-                                    <div className="group cursor-pointer" onClick={() => playVideo('video2')}>
-                                        <div
-                                            className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-gradient-to-b from-transparent via-transparent to-black/60">
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1586500036706-41963de24d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                                                alt="Sunset Views"
-                                                width={800}
-                                                height={600}
-                                                className="absolute inset-0 w-full h-full object-cover">
-                                            </Image>
-                                            <div
-                                                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70">
-                                            </div>
-                                            <div
-                                                className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                <div
-                                                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                                <h3 className="text-lg font-medium mb-2">Sunset Views</h3>
-                                                <p className="text-sm font-light opacity-90 leading-relaxed">
-                                                    Golden hour magic moments
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                ))}
                             </div>
                         </div>
 
@@ -454,10 +245,9 @@ export default function VideoSection() {
                         <div className="flex justify-center mt-8 space-x-4">
                             {/* Previous Button */}
                             <button onClick={prevGroup}
-                                className="bg-white/10 backdrop-blur-md border border-white/20 text-primary p-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                                className="bg-white/10 backdrop-blur-md border border-white/20 text-primary p-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                        d="M15 19l-7-7 7-7"></path>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"></path>
                                 </svg>
                             </button>
 
@@ -465,17 +255,16 @@ export default function VideoSection() {
                             <div className="flex space-x-2 items-center">
                                 {Array.from({ length: Math.max(1, Math.ceil(totalReels / perView)) }).map((_, pageIdx) => (
                                     <div key={pageIdx} onClick={() => setCurrentIndex(pageIdx * perView)}
-                                        className={`w-2 h-2 rounded-full transition-all duration-300 ${pageIdx === Math.floor(currentIndex / perView) ? 'bg-primary' : 'bg-gray-300'}`}
+                                        className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${pageIdx === Math.floor((currentIndex % totalReels) / perView) ? 'bg-primary' : 'bg-gray-300'}`}
                                     />
                                 ))}
                             </div>
 
                             {/* Next Button */}
                             <button onClick={nextGroup}
-                                className="bg-white/10 backdrop-blur-md border border-white/20 text-primary p-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                                className="bg-white/10 backdrop-blur-md border border-white/20 text-primary p-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7">
-                                    </path>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </button>
                         </div>
@@ -489,35 +278,27 @@ export default function VideoSection() {
                         </button>
                     </div>
                 </div>
-            </section >
+            </section>
 
-            {/* Video Modal */}
-            <div ref={videoModalRef} className={`fixed inset-0 bg-black/80 flex items-center justify-center z-50 ${modalOpen ? '' : 'hidden'}`}>
-                <div className="relative max-w-4xl mx-auto p-4">
+            {/* Video Modal - Optimized for 9:16 Instagram Reel Size */}
+            <div ref={videoModalRef} onClick={closeVideo} className={`fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 ${modalOpen ? '' : 'hidden'}`}>
+                <div className="relative w-full max-w-md mx-auto" onClick={(e) => e.stopPropagation()}>
                     <button onClick={closeVideo}
-                        className="absolute -top-2 -right-2 bg-white rounded-full p-2 hover:bg-gray-100 transition-colors z-10">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12">
-                            </path>
+                        className="absolute -top-12 right-0 bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors z-10">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
-                    <div className="bg-white rounded-2xl overflow-hidden">
-                        <div id="videoContainer" className="aspect-video bg-black">
-                            {/* Demo videos will be inserted here */}
-                            <video ref={videoRef} className="w-full h-full" controls>
-                                <source id="videoSource" src="" type="video/mp4" />
+                    <div className="bg-black rounded-2xl overflow-hidden shadow-2xl">
+                        <div className="aspect-[9/16] bg-black">
+                            <video ref={videoRef} className="w-full h-full object-contain" controls playsInline>
+                                <source src="" type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
-                        </div>
-                        <div className="p-6">
-                            <h3 className="text-xl font-medium text-primary mb-2">{modalTitle}</h3>
-                            <p className="text-gray-600 font-light">{modalDescription}</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* end client logic */}
         </>
     );
 }
