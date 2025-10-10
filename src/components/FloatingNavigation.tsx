@@ -53,7 +53,7 @@ export default function FloatingNavigation() {
     return (
         <>
             {/*  Floating Navigation  */}
-            <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:transform md:-translate-x-1/2 z-50 w-full md:w-auto px-4 md:px-0 py-4 md:py-0">
+            <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:transform md:-translate-x-1/2 z-50 w-full md:w-max px-4 md:px-0 py-4 md:py-0">
                 <div className="bg-white/95 backdrop-blur-xl md:rounded-full rounded-2xl shadow-sm border border-gray-100/50 px-5 py-3 ">
                     {/* Desktop Navigation  */}
                     <div className="hidden md:flex items-center space-x-10">
@@ -114,9 +114,6 @@ export default function FloatingNavigation() {
                     ref={menuRef}
                     className={`md:hidden mt-3 bg-white/98 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100/50 overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
                     <div className="flex flex-col px-2 py-3">
-                        <a href="#home"
-                            onClick={() => setMobileOpen(false)}
-                            className="text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Home</a>
                         <a href="#packages"
                             onClick={() => setMobileOpen(false)}
                             className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Packages</a>
@@ -129,12 +126,6 @@ export default function FloatingNavigation() {
                         <a href="#videos"
                             onClick={() => setMobileOpen(false)}
                             className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Videos</a>
-                        <a href="#testimonials"
-                            onClick={() => setMobileOpen(false)}
-                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Testimonials</a>
-                        <a href="#faq"
-                            onClick={() => setMobileOpen(false)}
-                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">FAQ</a>
                         <div className="px-2 pt-2 pb-1">
                             <button
                                 onClick={() => setMobileOpen(false)}

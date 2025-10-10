@@ -97,20 +97,32 @@ export default function VideoSection() {
         };
     }, [modalOpen]);
 
-    // Carousel controls (single-reel movement + infinite wrap)
+    // Carousel controls (true infinite scroll with cloning)
     const updateCarousel = (instant = false) => {
         if (!trackRef.current) return;
         const track = trackRef.current;
         const children = Array.from(track.children) as HTMLElement[];
-        const idx = currentIndex % totalReels;
-        const target = children[idx];
+
+        // Calculate position based on actual index (can go beyond bounds)
+        const actualIndex = currentIndex % totalReels;
+        const displayIndex = actualIndex < 0 ? totalReels + actualIndex : actualIndex;
+
+        // Find the middle clone set (index + totalReels)
+        const targetIndex = displayIndex + totalReels;
+        const target = children[targetIndex];
+
         if (!target) return;
+
         if (instant) track.style.transition = 'none';
         else track.style.transition = 'transform 500ms ease-in-out';
+
         const offset = target.offsetLeft;
         track.style.transform = `translateX(-${offset}px)`;
+
         if (instant) {
-            requestAnimationFrame(() => { track.style.transition = 'transform 500ms ease-in-out'; });
+            requestAnimationFrame(() => {
+                if (track) track.style.transition = 'transform 500ms ease-in-out';
+            });
         }
     };
 
@@ -118,7 +130,28 @@ export default function VideoSection() {
         updateCarousel();
     }, [currentIndex, perView]);
 
-    // Auto-play (advance one reel, infinite)
+    // Reset position when reaching boundaries (seamless infinite loop)
+    useEffect(() => {
+        if (!trackRef.current) return;
+        const track = trackRef.current;
+
+        const handleTransitionEnd = () => {
+            const actualIndex = currentIndex % totalReels;
+            const displayIndex = actualIndex < 0 ? totalReels + actualIndex : actualIndex;
+
+            // If we're at the beginning or end clones, reset to the middle set
+            if (currentIndex >= totalReels * 2 || currentIndex < 0) {
+                // Instantly move to the equivalent position in the middle set
+                setCurrentIndex(displayIndex);
+                setTimeout(() => updateCarousel(true), 0);
+            }
+        };
+
+        track.addEventListener('transitionend', handleTransitionEnd);
+        return () => track.removeEventListener('transitionend', handleTransitionEnd);
+    }, [currentIndex, totalReels]);
+
+    // Auto-play (truly infinite)
     const autoPlayRef = useRef<number | null>(null);
     const startAutoPlay = () => {
         stopAutoPlay();
@@ -147,7 +180,7 @@ export default function VideoSection() {
         return () => { el.removeEventListener('mouseenter', onEnter); el.removeEventListener('mouseleave', onLeave); };
     }, []);
 
-    // Touch support (single-reel swipe)
+    // Touch support (seamless infinite swipe)
     useEffect(() => {
         const el = carouselRef.current;
         if (!el) return;
@@ -159,8 +192,8 @@ export default function VideoSection() {
             const endX = e.changedTouches[0].clientX; const endY = e.changedTouches[0].clientY;
             const diffX = startX - endX; const diffY = startY - endY;
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                if (diffX > 0) setCurrentIndex(i => i + 1);
-                else setCurrentIndex(i => i - 1);
+                if (diffX > 0) nextGroup();
+                else prevGroup();
             }
             startX = null; startY = null;
         };
@@ -177,8 +210,13 @@ export default function VideoSection() {
         return () => { window.removeEventListener('resize', onResize); if (t) window.clearTimeout(t); };
     }, []);
 
-    const prevGroup = () => setCurrentIndex(i => i - 1);
-    const nextGroup = () => setCurrentIndex(i => i + 1);
+    const prevGroup = () => {
+        setCurrentIndex(i => i - 1);
+    };
+
+    const nextGroup = () => {
+        setCurrentIndex(i => i + 1);
+    };
 
     // Create array of video items for rendering
     const videoItems = Object.entries(videoData).map(([id, data]) => ({
@@ -210,8 +248,9 @@ export default function VideoSection() {
                         {/* Carousel Container */}
                         <div className="overflow-hidden" ref={carouselRef}>
                             <div ref={trackRef} className="flex transition-transform duration-500 ease-in-out">
-                                {videoItems.map((video) => (
-                                    <div key={video.id} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
+                                {/* Render videos 3 times for infinite scroll effect */}
+                                {[...videoItems, ...videoItems, ...videoItems].map((video, index) => (
+                                    <div key={`${video.id}-${index}`} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/4 px-3">
                                         <div className="group cursor-pointer" onClick={() => playVideo(video.id)}>
                                             <div className="relative aspect-[9/16] rounded-3xl overflow-hidden bg-black">
                                                 {/* Video Thumbnail - Shows first frame */}
@@ -251,16 +290,22 @@ export default function VideoSection() {
                                 </svg>
                             </button>
 
-                            {/* Indicators */}
+                            {/* Indicators - One dot per video */}
                             <div className="flex space-x-2 items-center">
-                                {Array.from({ length: Math.max(1, Math.ceil(totalReels / perView)) }).map((_, pageIdx) => (
-                                    <div key={pageIdx} onClick={() => setCurrentIndex(pageIdx * perView)}
-                                        className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${pageIdx === Math.floor((currentIndex % totalReels) / perView) ? 'bg-primary' : 'bg-gray-300'}`}
-                                    />
-                                ))}
-                            </div>
+                                {Array.from({ length: totalReels }).map((_, videoIdx) => {
+                                    // Calculate actual position in the original video array
+                                    const actualIndex = currentIndex % totalReels;
+                                    const normalizedIndex = actualIndex < 0 ? totalReels + actualIndex : actualIndex;
 
-                            {/* Next Button */}
+                                    return (
+                                        <div
+                                            key={videoIdx}
+                                            onClick={() => setCurrentIndex(videoIdx)}
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${videoIdx === normalizedIndex ? 'bg-primary' : 'bg-gray-300'}`}
+                                        />
+                                    );
+                                })}
+                            </div>                            {/* Next Button */}
                             <button onClick={nextGroup}
                                 className="bg-white/10 backdrop-blur-md border border-white/20 text-primary p-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

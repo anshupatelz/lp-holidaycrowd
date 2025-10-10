@@ -205,24 +205,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Absolutely incredible experience! HolidaysCrowd made our Bali honeymoon
-                                        perfect. The temple
-                                        tour was magical, and our guide knew all the hidden spots. Every detail was
-                                        perfectly
-                                        planned."
+                                        "We had an amazing time on our trip to Bali with Holidays Crowd! The tour guides were so knowledgeable about the culture of the island. We would highly recommend this company."
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1494790108755-2616b612b367?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="Sarah Mitchell"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">Sarah Mitchell</h4>
+                                            <h4 className="text-sm font-medium text-primary">Yogesh Kumar</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>
@@ -275,22 +271,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Best travel agency ever! The Nusa Penida day trip was breathtaking.
-                                        Professional service,
-                                        amazing photos, and the local guide was fantastic. Worth every penny!"
+                                        "I had a great Experience with Holidays Crowd in terms of booking.They ensured i got the best price in the market which i did. I look Forward to Book trip with Holidays Crowd."
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="Mike Chen"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">Mike Chen</h4>
+                                            <h4 className="text-sm font-medium text-primary">Hari Shankar</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>
@@ -343,23 +337,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Family vacation made easy! Our kids loved the monkey forest, and we enjoyed the
-                                        cultural
-                                        cooking className. Great balance of adventure and relaxation. Highly
-                                        recommended!"
+                                        "We took a Bali tour package with Holiday Crowd Company!I didn't have to worry about anything. I would definitely recommend this company to anyone looking for a hassle-free holiday in Bali."
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="Priya Sharma"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">Priya Sharma</h4>
+                                            <h4 className="text-sm font-medium text-primary">Vikash Yadav</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>
@@ -412,22 +403,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Amazing adventure package! The Mount Batur sunrise trek was unforgettable.
-                                        Great
-                                        photography spots and our guide was knowledgeable. Will definitely book again!"
+                                        "I took holiday crowd's service for my trip to Bali. We wanted to explore bali more on the tropical side. The tour guide was very flexible and made our trip 10 times better. Overall very satisfied"
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="James Wilson"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">James Wilson</h4>
+                                            <h4 className="text-sm font-medium text-primary">Dev A</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>
@@ -480,23 +469,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Exceptional service from start to finish! The spa day was so relaxing and the
-                                        beach club
-                                        experience was luxury at its finest. Thank you for making our anniversary
-                                        special!"
+                                        "Enjoyed the Bali trip organised by Holiday Crowd, mind blowing experience and arrangements from Bali. Adventure rides were so njoyable best western resort kuta s gud too."
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="Emma Thompson"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">Emma Thompson</h4>
+                                            <h4 className="text-sm font-medium text-primary">Subhash Murmu</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>
@@ -549,23 +535,20 @@ export default function TestimonialsSection() {
 
                                     {/* Review Text */}
                                     <blockquote className="text-gray-700 font-light leading-relaxed mb-6 text-base">
-                                        "Solo traveler here! Felt completely safe and well taken care of. The Instagram
-                                        photo tour
-                                        was amazing - got the most beautiful shots for my social media. Perfect solo
-                                        adventure!"
+                                        "Was really impressed with Holiday Crowd's service the arrangements they made for us in Bali"
                                     </blockquote>
 
                                     {/* User Profile */}
                                     <div className="flex items-center space-x-4">
-                                        <Image
+                                        {/* <Image
                                             src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
                                             alt="Lisa Rodriguez"
                                             width={800}
                                             height={600}
                                             className="w-12 h-12 rounded-full object-cover border-2 border-gray-100">
-                                        </Image>
+                                        </Image> */}
                                         <div>
-                                            <h4 className="text-sm font-medium text-primary">Lisa Rodriguez</h4>
+                                            <h4 className="text-sm font-medium text-primary">Mamatha Akula</h4>
                                             <p className="text-xs text-gray-500 font-light">Verified Google User</p>
                                         </div>
                                     </div>

@@ -22,7 +22,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/2b16fac6-2cdd-47cb-ba19-0815d4b3e943?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Delhi to Bali Tour"
                                 width={800}
                                 height={600}
@@ -73,7 +73,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/21c5a18a-3a53-4c02-8751-23f048585544?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Amazing Bali Package"
                                 width={800}
                                 height={600}
@@ -124,7 +124,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/ca2a5dd0-f54c-4d79-8021-8d185d93aee1?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Sea and Sand Bali"
                                 width={800}
                                 height={600}
@@ -175,7 +175,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/a62ed373-d4de-45b7-959e-fc68636a0b2b?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Bali Honeymoon Package"
                                 width={800}
                                 height={600}
@@ -230,7 +230,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/c0554687-246c-4481-9056-23057283813e?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Best Bali Tour for Couple"
                                 width={800}
                                 height={600}
@@ -281,7 +281,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/2bcfe0fb-27af-4709-bef1-8c7e397c0569?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Unforgettable Bali Tour"
                                 width={800}
                                 height={600}
@@ -332,7 +332,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1586500036706-41963de24d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/38077d87-dc36-435e-87f5-6b8f2a10e76e?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Refreshing Bali Package"
                                 width={800}
                                 height={600}
@@ -387,7 +387,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1573790387438-4da905039392?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/36ed2945-efe8-4b30-894a-ab56e19987bd?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Ultimate Bali Tour"
                                 width={800}
                                 height={600}
@@ -442,7 +442,7 @@ export default function PackagesSection() {
                     <div
                         className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                         <div className="relative">
-                            <Image src="https://images.unsplash.com/photo-1586500036706-41963de24d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            <Image src="https://holidayscrowd-assets.imgix.net/24199c3b-aedc-4fde-a465-318d11ee57dd?auto=format%2Ccompress&w=600&q=85&fm=webp"
                                 alt="Bali Tour from Bangalore"
                                 width={800}
                                 height={600}
