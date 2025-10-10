@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 export default function FloatingNavigation() {
@@ -52,25 +53,26 @@ export default function FloatingNavigation() {
     return (
         <>
             {/*  Floating Navigation  */}
-            <nav className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
-                <div className="bg-white/95 backdrop-blur-xl rounded-full shadow-sm border border-gray-100/50 px-5 py-3 ">
+            <nav className="fixed top-0 md:top-8 left-0 md:left-1/2 md:transform md:-translate-x-1/2 z-50 w-full md:w-auto px-4 md:px-0 py-4 md:py-0">
+                <div className="bg-white/95 backdrop-blur-xl md:rounded-full rounded-2xl shadow-sm border border-gray-100/50 px-5 py-3 ">
                     {/* Desktop Navigation  */}
                     <div className="hidden md:flex items-center space-x-10">
                         {/* Logo  */}
                         <div className="flex-shrink-0 mr-6">
-                            <h1 className="text-lg font-light text-primary tracking-wide">HolidaysCrowd</h1>
+                            <h1 className="text-lg font-light text-primary tracking-wide">
+                                <Image src="/logo-dark.png" alt="HolidaysCrowd Logo" width={130} height={30} />
+                            </h1>
                         </div>
 
                         {/* Navigation Links  */}
-                        <a href="#"
-                            className="text-primary hover:text-gray-500 px-3 py-1 text-sm font-light transition-all duration-300">Home</a>
                         <a href="#packages"
                             className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Packages</a>
-                        <a href="#about"
-                            className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">About</a>
-                        <a href="#contact"
-                            className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Contact</a>
-
+                        <a href="#activities"
+                            className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Activities</a>
+                        <a href="#attractions"
+                            className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Attractions</a>
+                        <a href="#videos"
+                            className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Videos</a>
                         {/* CTA Button  */}
                         <button
                             className="bg-primary/90 text-white px-7 py-2 rounded-full font-light text-sm hover:bg-primary transition-all duration-300 ml-6 whitespace-nowrap">
@@ -82,7 +84,7 @@ export default function FloatingNavigation() {
                     <div className="md:hidden flex items-center justify-between w-full">
                         {/* Logo  */}
                         <div className="flex-shrink-0">
-                            <h1 className="text-base font-light text-primary tracking-wide">HolidaysCrowd</h1>
+                            <Image src="/logo-dark.png" alt="HolidaysCrowd Logo" width={110} height={25} />
                         </div>
 
                         {/* Mobile Menu Button  */}
@@ -93,9 +95,15 @@ export default function FloatingNavigation() {
                             aria-expanded={mobileOpen}
                             aria-controls="mobile-menu"
                         >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
+                            {mobileOpen ? (
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            )}
                         </button>
                     </div>
                 </div>
@@ -104,19 +112,36 @@ export default function FloatingNavigation() {
                 <div
                     id="mobile-menu"
                     ref={menuRef}
-                    className={`md:hidden mt-3 bg-white/95 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100/50 px-6 py-5 ${mobileOpen ? '' : 'hidden'}`}>
-                    <div className="flex flex-col space-y-1">
-                        <a href="#"
-                            className="text-primary hover:text-gray-500 px-4 py-3 text-sm font-light transition-all duration-300">Home</a>
+                    className={`md:hidden mt-3 bg-white/98 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100/50 overflow-hidden transition-all duration-300 ${mobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+                    <div className="flex flex-col px-2 py-3">
+                        <a href="#home"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Home</a>
                         <a href="#packages"
-                            className="text-gray-500 hover:text-primary px-4 py-3 text-sm font-light transition-all duration-300">Packages</a>
-                        <a href="#about"
-                            className="text-gray-500 hover:text-primary px-4 py-3 text-sm font-light transition-all duration-300">About</a>
-                        <a href="#contact"
-                            className="text-gray-500 hover:text-primary px-4 py-3 text-sm font-light transition-all duration-300">Contact</a>
-                        <button
-                            className="bg-primary/90 text-white px-6 py-3 rounded-full font-light text-sm hover:bg-primary transition-all duration-300 mt-4 w-fit self-center whitespace-nowrap">Book
-                            Now</button>
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Packages</a>
+                        <a href="#activities"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Activities</a>
+                        <a href="#attractions"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Attractions</a>
+                        <a href="#videos"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Videos</a>
+                        <a href="#testimonials"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Testimonials</a>
+                        <a href="#faq"
+                            onClick={() => setMobileOpen(false)}
+                            className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">FAQ</a>
+                        <div className="px-2 pt-2 pb-1">
+                            <button
+                                onClick={() => setMobileOpen(false)}
+                                className="bg-primary text-white px-6 py-3 rounded-full font-light text-sm hover:bg-secondary transition-all duration-300 w-full">
+                                Book Now
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
