@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function PackagesSection() {
     return (
-        <section id="packages" className="py-20 bg-gray-50/30">
+        <section id="packages" className="py-0 bg-gray-50/30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-16">
