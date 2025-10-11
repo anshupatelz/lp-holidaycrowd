@@ -1,4 +1,7 @@
+'use client';
+
 import Image from "next/image";
+import { useState } from 'react';
 import FloatingNavigation from "@/components/FloatingNavigation";
 import HeroSection from "@/components/HeroSection";
 import PackagesSection from "@/components/PackagesSection";
@@ -10,9 +13,11 @@ import VideoSection from "@/components/VideoSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import FooterSection from "@/components/FooterSection";
-
+import MultiStepFormPopup from "@/components/MultiStepFormPopup";
 
 export default function Home() {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   return (
     <div>
       <FloatingNavigation />
@@ -26,6 +31,12 @@ export default function Home() {
       <TestimonialsSection />
       <FAQSection />
       <FooterSection />
+
+      {/* Multi-Step Form Popup */}
+      <MultiStepFormPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+      />
     </div>
   );
 }

@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import MultiStepFormPopup from './MultiStepFormPopup';
 
 export default function VideoSection() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const carouselRef = useRef<HTMLDivElement | null>(null);
     const trackRef = useRef<HTMLDivElement | null>(null);
     const videoModalRef = useRef<HTMLDivElement | null>(null);
@@ -237,9 +239,6 @@ export default function VideoSection() {
                             <h3 className="text-xl md:text-2xl font-light text-gray-700 mb-4 leading-relaxed">
                                 See Bali Through Our Travelers' Eyes
                             </h3>
-                            <p className="text-lg text-gray-600 font-light leading-relaxed">
-                                Real experiences, real emotions, real memories from our happy customers
-                            </p>
                         </div>
                     </div>
 
@@ -318,6 +317,7 @@ export default function VideoSection() {
                     {/* Bottom CTA */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                         <button
+                            onClick={() => setIsPopupOpen(true)}
                             className="bg-primary text-white px-8 py-4 rounded-full font-light text-lg hover:bg-secondary transition-all duration-300 shadow-sm">
                             Book A Tour
                         </button>
@@ -344,6 +344,12 @@ export default function VideoSection() {
                     </div>
                 </div>
             </div>
+
+            {/* Multi-Step Form Popup */}
+            <MultiStepFormPopup
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+            />
         </>
     );
 }

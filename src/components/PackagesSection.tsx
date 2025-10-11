@@ -3,8 +3,10 @@
 import Image from "next/image";
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
+import MultiStepFormPopup from './MultiStepFormPopup';
 
 export default function PackagesSection() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,
         align: 'start',
@@ -80,8 +82,7 @@ export default function PackagesSection() {
             discount: "14%",
             image: "https://holidayscrowd-assets.imgix.net/a62ed373-d4de-45b7-959e-fc68636a0b2b?auto=format%2Ccompress&w=600&q=85&fm=webp",
             alt: "Bali Honeymoon Package",
-            buttonClass: "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600",
-            isHoneymoon: true
+            buttonClass: "bg-primary hover:bg-secondary"
         },
         {
             title: "Best Bali Tour Packages for Couple",
@@ -214,7 +215,9 @@ export default function PackagesSection() {
                                                     <span className="text-sm text-gray-500">/ {pkg.days}</span>
                                                 </div>
                                             </div>
-                                            <button className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                            <button
+                                                onClick={() => setIsPopupOpen(true)}
+                                                className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
                                                 Enquire Now
                                             </button>
                                         </div>
@@ -289,7 +292,9 @@ export default function PackagesSection() {
                                         <span className="text-sm text-gray-500">/ {pkg.days}</span>
                                     </div>
                                 </div>
-                                <button className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                <button
+                                    onClick={() => setIsPopupOpen(true)}
+                                    className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
                                     Enquire Now
                                 </button>
                             </div>
@@ -299,12 +304,19 @@ export default function PackagesSection() {
 
                 {/* Show More Button */}
                 <div className="text-center mt-12">
-                    <button id="show-more-btn"
+                    <button
+                        onClick={() => setIsPopupOpen(true)}
                         className="bg-white border-2 border-primary text-primary px-8 py-3 rounded-full font-light hover:bg-primary hover:text-white transition-all duration-300 shadow-sm">
                         Book A Trip
                     </button>
                 </div>
             </div>
+
+            {/* Multi-Step Form Popup */}
+            <MultiStepFormPopup
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+            />
         </section>
     );
 }

@@ -1,14 +1,25 @@
 'use client';
 
 import { useState } from 'react';
+import MultiStepFormPopup from './MultiStepFormPopup';
 
 export default function FooterSection() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber: '',
         emailAddress: '',
         location: ''
     });
+
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpValue, setOtpValue] = useState('');
+    const [generatedOtp, setGeneratedOtp] = useState('');
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState({ type: '', text: '' });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -18,11 +29,130 @@ export default function FooterSection() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Generate 6-digit OTP
+    const generateOTP = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
+
+    // Send OTP to phone
+    const sendOTP = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log('Form submitted:', formData);
-        // You can add your form submission logic here
+        setIsSending(true);
+        setMessage({ type: '', text: '' });
+
+        try {
+            const otp = generateOTP();
+            setGeneratedOtp(otp);
+
+            // Format phone number: add 91 prefix (without +)
+            const phoneWithCountryCode = `91${formData.phoneNumber}`;
+
+            const response = await fetch(
+                `http://api.savshka.co.in/api/sms?key=vxX4y4ui&to=${phoneWithCountryCode}&from=HLDCWD&body=Dear Traveler, Your secure OTP for Holidays Crowd account is ${otp} valid only for 5 minutes.&entityid=1001326296432787407&templateid=1007092667854703158`
+            );
+
+            const result = await response.json();
+            console.log('SMS API Response:', result);
+
+            if (response.ok && result.status !== 700) {
+                setOtpSent(true);
+                setMessage({ type: 'success', text: 'OTP sent successfully! Please check your phone.' });
+
+                // Auto-expire OTP after 5 minutes
+                setTimeout(() => {
+                    setGeneratedOtp('');
+                    setOtpSent(false);
+                    setMessage({ type: 'error', text: 'OTP expired. Please request a new one.' });
+                }, 5 * 60 * 1000);
+            } else {
+                setMessage({ type: 'error', text: `Failed to send OTP: ${result.description || 'Please check your phone number'}` });
+            }
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+            setMessage({ type: 'error', text: 'Error sending OTP. Please try again.' });
+        } finally {
+            setIsSending(false);
+        }
+    };
+
+    // Verify OTP and submit form
+    const verifyOTPAndSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsVerifying(true);
+        setMessage({ type: '', text: '' });
+
+        // Verify OTP
+        if (otpValue !== generatedOtp) {
+            setMessage({ type: 'error', text: 'Invalid OTP. Please try again.' });
+            setIsVerifying(false);
+            return;
+        }
+
+        // OTP verified, now submit to CRM
+        setIsSubmitting(true);
+        try {
+            const requestId = `HC-${Date.now()}`; // Generate unique request ID
+            const phone = formData.phoneNumber;
+            const email = formData.emailAddress;
+            const Fullname = formData.fullName;
+            const location = formData.location;
+
+            // Default values for required fields (you can add more form fields if needed)
+            const tripDate = new Date().toISOString().split('T')[0];
+            const days = '5';
+            const adult = '2';
+            const child = '0';
+            const infant = '0';
+            const destination = 'Bali';
+            const hotelCategoryy = 'Standard';
+            const flexible = 'No';
+            const whatsapp = 'Yes';
+            const tripTheme = 'Leisure';
+
+            const sembark = await fetch(
+                `https://api.sembark.com/integrations/v1/trip-plan-requests?name=${Fullname}&phone_number=+91${phone}&email=${email}&start_date=${tripDate}&no_of_days=${days}&no_of_adults=${adult}&no_of_children=${child}&no_of_infant=${infant}&destination=${destination}&Hotelcategory=${hotelCategoryy}&flexibleDate?=${flexible}&whatsapp?=${whatsapp}&Triptheme=${tripTheme}&Guest'slocation=${location}&client_request_uid=${requestId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: "540|322bbLy0a6LYOEARcsM8z8mSCQ53qq6oZwcZCuUZ72b9651f",
+                    },
+                }
+            );
+
+            const sembarkResponse = await sembark.json();
+            console.log('CRM Response:', sembarkResponse);
+
+            if (sembark.ok) {
+                setMessage({ type: 'success', text: 'Form submitted successfully! We will contact you soon.' });
+                // Reset form
+                setFormData({
+                    fullName: '',
+                    phoneNumber: '',
+                    emailAddress: '',
+                    location: ''
+                });
+                setOtpValue('');
+                setOtpSent(false);
+                setGeneratedOtp('');
+            } else {
+                setMessage({ type: 'error', text: 'Failed to submit form. Please try again.' });
+            }
+        } catch (error) {
+            console.error('Error submitting to CRM:', error);
+            setMessage({ type: 'error', text: 'Error submitting form. Please try again.' });
+        } finally {
+            setIsVerifying(false);
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        if (!otpSent) {
+            sendOTP(e);
+        } else {
+            verifyOTPAndSubmit(e);
+        }
     };
 
     return (
@@ -45,6 +175,17 @@ export default function FooterSection() {
                         {/* Contact Form */}
                         <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
                             <h3 className="text-2xl font-light text-white mb-6">Send Us a Message</h3>
+
+                            {/* Success/Error Message */}
+                            {message.text && (
+                                <div className={`mb-4 p-4 rounded-xl ${message.type === 'success'
+                                    ? 'bg-green-500/20 border border-green-500/30 text-green-100'
+                                    : 'bg-red-500/20 border border-red-500/30 text-red-100'
+                                    }`}>
+                                    <p className="text-sm font-light">{message.text}</p>
+                                </div>
+                            )}
+
                             <form onSubmit={handleSubmit} className="space-y-5">
                                 <div className="grid md:grid-cols-2 gap-4">
                                     <div>
@@ -60,22 +201,35 @@ export default function FooterSection() {
                                             placeholder="Your Name"
                                             className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
                                             required
+                                            disabled={otpSent}
                                         />
                                     </div>
                                     <div>
                                         <label htmlFor="phoneNumber" className="block text-sm font-light text-white/90 mb-2">
-                                            Phone Number
+                                            Phone Number (India +91)
                                         </label>
-                                        <input
-                                            type="tel"
-                                            id="phoneNumber"
-                                            name="phoneNumber"
-                                            value={formData.phoneNumber}
-                                            onChange={handleInputChange}
-                                            placeholder="Your phone"
-                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
-                                            required
-                                        />
+                                        <div className="relative">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 font-light pointer-events-none">
+                                                +91
+                                            </span>
+                                            <input
+                                                type="tel"
+                                                id="phoneNumber"
+                                                name="phoneNumber"
+                                                value={formData.phoneNumber}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, '');
+                                                    if (value.length <= 10) {
+                                                        setFormData(prev => ({ ...prev, phoneNumber: value }));
+                                                    }
+                                                }}
+                                                placeholder="9876543210"
+                                                maxLength={10}
+                                                className="w-full pl-14 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                                                required
+                                                disabled={otpSent}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -91,6 +245,7 @@ export default function FooterSection() {
                                         placeholder="your@email.com"
                                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
                                         required
+                                        disabled={otpSent}
                                     />
                                 </div>
                                 <div>
@@ -106,13 +261,75 @@ export default function FooterSection() {
                                         placeholder="Your location"
                                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
                                         required
+                                        disabled={otpSent}
                                     />
                                 </div>
+
+                                {/* OTP Input Field - Shows only after OTP is sent */}
+                                {otpSent && (
+                                    <div>
+                                        <label htmlFor="otp" className="block text-sm font-light text-white/90 mb-2">
+                                            Enter OTP
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="otp"
+                                            value={otpValue}
+                                            onChange={(e) => setOtpValue(e.target.value)}
+                                            placeholder="Enter 6-digit OTP"
+                                            maxLength={6}
+                                            pattern="[0-9]{6}"
+                                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                                            required
+                                        />
+                                        <p className="text-xs text-white/70 mt-2">
+                                            OTP is valid for 5 minutes. Didn't receive?
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setOtpSent(false);
+                                                    setOtpValue('');
+                                                    setMessage({ type: '', text: '' });
+                                                }}
+                                                className="ml-1 underline hover:text-white"
+                                            >
+                                                Resend OTP
+                                            </button>
+                                        </p>
+                                    </div>
+                                )}
+
                                 <button
                                     type="submit"
-                                    className="w-full bg-white text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-white/90 transition-all duration-300 shadow-lg"
+                                    disabled={isSending || isVerifying || isSubmitting}
+                                    className="w-full bg-white text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-white/90 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Request For Call Back
+                                    {isSending
+                                        ? 'Sending OTP...'
+                                        : isVerifying || isSubmitting
+                                            ? 'Submitting...'
+                                            : otpSent
+                                                ? 'Verify OTP & Submit'
+                                                : 'Send OTP'}
+                                </button>
+
+                                {/* OR Divider */}
+                                <div className="relative my-6">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <div className="w-full border-t border-white/20"></div>
+                                    </div>
+                                    <div className="relative flex justify-center text-sm">
+                                        <span className="px-4 bg-white/5 text-white/70 font-light">OR</span>
+                                    </div>
+                                </div>
+
+                                {/* Plan Your Trip Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => setIsPopupOpen(true)}
+                                    className="w-full bg-white/10 text-white px-8 py-4 rounded-full font-light text-lg hover:bg-white/20 transition-all duration-300 border border-white/20"
+                                >
+                                    Plan Your Custom Trip →
                                 </button>
                             </form>
                         </div>
@@ -204,6 +421,12 @@ export default function FooterSection() {
                     </div>
                 </div>
             </div>
+
+            {/* Multi-Step Form Popup */}
+            <MultiStepFormPopup
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+            />
         </footer>
     );
 }

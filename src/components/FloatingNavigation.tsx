@@ -2,9 +2,11 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import MultiStepFormPopup from './MultiStepFormPopup';
 
 export default function FloatingNavigation() {
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const btnRef = useRef<HTMLButtonElement | null>(null);
 
@@ -75,7 +77,8 @@ export default function FloatingNavigation() {
                             className="text-gray-500 hover:text-primary px-3 py-1 text-sm font-light transition-all duration-300">Videos</a>
                         {/* CTA Button  */}
                         <button
-                            className="bg-primary/90 text-white px-7 py-2 rounded-full font-light text-sm hover:bg-primary transition-all duration-300 ml-6 whitespace-nowrap">
+                            onClick={() => setIsPopupOpen(true)}
+                            className="bg-primary/90 text-white px-7 py-2 rounded-full font-light text-sm hover:bg-primary transition-all duration-300 ml-6 whitespace-nowrap cursor-pointer">
                             Book Now
                         </button>
                     </div>
@@ -128,7 +131,10 @@ export default function FloatingNavigation() {
                             className="text-gray-700 hover:text-primary hover:bg-gray-50 px-4 py-3 text-sm font-light transition-all duration-300 rounded-lg">Videos</a>
                         <div className="px-2 pt-2 pb-1">
                             <button
-                                onClick={() => setMobileOpen(false)}
+                                onClick={() => {
+                                    setMobileOpen(false);
+                                    setIsPopupOpen(true);
+                                }}
                                 className="bg-primary text-white px-6 py-3 rounded-full font-light text-sm hover:bg-secondary transition-all duration-300 w-full">
                                 Book Now
                             </button>
@@ -136,6 +142,12 @@ export default function FloatingNavigation() {
                     </div>
                 </div>
             </nav>
+
+            {/* Multi-Step Form Popup */}
+            <MultiStepFormPopup
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+            />
         </>
     );
 }

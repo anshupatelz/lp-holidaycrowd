@@ -126,10 +126,6 @@ export default function TestimonialsSection() {
                         <h3 className="text-xl md:text-2xl font-light text-gray-700 mb-4 leading-relaxed">
                             Real Reviews from Real Adventures
                         </h3>
-                        <p className="text-lg text-gray-600 font-light leading-relaxed">
-                            Don't just take our word for it. Here's what our happy travelers have to say about their
-                            Bali experiences
-                        </p>
                     </div>
                 </div>
 

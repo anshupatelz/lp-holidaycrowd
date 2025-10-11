@@ -210,9 +210,6 @@ export default function FamousAttractionsSection() {
                         <h3 className="text-xl md:text-2xl font-light text-gray-700 mb-4 leading-relaxed">
                             Must-Visit Attractions That Make Bali Truly Magical
                         </h3>
-                        <p className="text-lg text-gray-600 font-light leading-relaxed">
-                            Every destination tells a story. Here are the chapters you can't miss:
-                        </p>
                     </div>
                 </div>
 
