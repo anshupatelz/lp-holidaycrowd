@@ -188,11 +188,6 @@ export default function PackagesSection() {
                                             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
                                                 {pkg.duration}
                                             </div>
-                                            {pkg.isHoneymoon && (
-                                                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                                                    💕 Honeymoon Special
-                                                </div>
-                                            )}
                                         </div>
                                         <div className="p-6">
                                             <div className="flex items-center justify-between mb-3">
@@ -265,11 +260,6 @@ export default function PackagesSection() {
                                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
                                     {pkg.duration}
                                 </div>
-                                {pkg.isHoneymoon && (
-                                    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                                        💕 Honeymoon Special
-                                    </div>
-                                )}
                             </div>
                             <div className="p-6">
                                 <div className="flex items-center justify-between mb-3">
