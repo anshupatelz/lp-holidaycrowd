@@ -2,11 +2,70 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MultiStepFormPopup from './MultiStepFormPopup';
+
+// Extend Window type to include YT
+declare global {
+    interface Window {
+        YT: any;
+        onYouTubeIframeAPIReady: () => void;
+    }
+}
 
 export default function HeroSection() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const playerRef = useRef<any>(null);
+    const playerContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+        // Initialize player when API is ready
+        window.onYouTubeIframeAPIReady = () => {
+            playerRef.current = new window.YT.Player(playerContainerRef.current, {
+                videoId: 'T3SGXIubEE4',
+                playerVars: {
+                    autoplay: 1,
+                    mute: 1,
+                    loop: 1,
+                    playlist: 'T3SGXIubEE4',
+                    controls: 0,
+                    showinfo: 0,
+                    rel: 0,
+                    modestbranding: 1,
+                    iv_load_policy: 3,
+                    disablekb: 1,
+                    fs: 0,
+                    playsinline: 1,
+                },
+                events: {
+                    onReady: (event: any) => {
+                        event.target.mute();
+                        event.target.playVideo();
+                        // Set quality to highest available (hd1080, hd720, etc.)
+                        event.target.setPlaybackQuality('hd1080');
+                    },
+                    onStateChange: (event: any) => {
+                        // Ensure video loops
+                        if (event.data === window.YT.PlayerState.ENDED) {
+                            event.target.playVideo();
+                        }
+                    },
+                },
+            });
+        };
+
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.destroy();
+            }
+        };
+    }, []);
 
     return (
         <>
@@ -21,20 +80,16 @@ export default function HeroSection() {
                         }}
                     />
 
-                    {/* YouTube Video */}
-                    <iframe
+                    {/* YouTube Video Player */}
+                    <div
+                        ref={playerContainerRef}
                         className="absolute inset-0 w-full h-full pointer-events-none"
                         style={{
                             width: '100vw',
                             height: '100vh',
-                            objectFit: 'cover',
                             transform: 'scale(1.5)',
-                            transformOrigin: 'center center'
+                            transformOrigin: 'center center',
                         }}
-                        src="https://www.youtube.com/embed/T3SGXIubEE4?autoplay=1&mute=1&loop=1&playlist=T3SGXIubEE4&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
-                        title="Bali Background Video"
-                        allow="autoplay; encrypted-media"
-                        aria-hidden="true"
                     />
 
                     {/* Gradient Overlays for better content visibility */}

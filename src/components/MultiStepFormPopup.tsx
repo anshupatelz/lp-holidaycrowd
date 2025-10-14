@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, MapPin, Users, Calendar, Hotel, User, Phone, Mail, Mountain, Waves, Church, Leaf, Heart, UserCircle } from 'lucide-react';
 
 // Common icon props for consistent styling
@@ -36,6 +37,7 @@ interface MultiStepFormPopupProps {
 }
 
 export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPopupProps) {
+    const router = useRouter();
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<FormData>({
         destination: 'Bali',
@@ -119,17 +121,22 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
             const otp = generateOTP();
             setGeneratedOtp(otp);
 
-            // Format phone number: add 91 prefix (without +)
-            const phoneWithCountryCode = `91${formData.phoneNumber}`;
-
-            const response = await fetch(
-                `https://api.savshka.co.in/api/sms?key=vxX4y4ui&to=${phoneWithCountryCode}&from=HLDCWD&body=Dear Traveler, Your secure OTP for Holidays Crowd account is ${otp} valid only for 5 minutes.&entityid=1001326296432787407&templateid=1007092667854703158`
-            );
+            // Call our Next.js API route instead of direct SMS API
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber: formData.phoneNumber,
+                    otp: otp,
+                }),
+            });
 
             const result = await response.json();
-            console.log('SMS API Response:', result);
+            console.log('OTP API Response:', result);
 
-            if (response.ok && result.status !== 700) {
+            if (result.success) {
                 setOtpSent(true);
                 setMessage({ type: 'success', text: 'OTP sent successfully! Please check your phone.' });
 
@@ -140,7 +147,7 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
                     setMessage({ type: 'error', text: 'OTP expired. Please request a new one.' });
                 }, 5 * 60 * 1000);
             } else {
-                setMessage({ type: 'error', text: `Failed to send OTP: ${result.description || 'Please check your phone number'}` });
+                setMessage({ type: 'error', text: `Failed to send OTP: ${result.message || 'Please check your phone number'}` });
             }
         } catch (error) {
             console.error('Error sending OTP:', error);
@@ -163,26 +170,24 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
         }
 
         try {
-            const requestId = `HC-${Date.now()}`;
-            const sembark = await fetch(
-                `https://api.sembark.com/integrations/v1/trip-plan-requests?name=${formData.fullName}&phone_number=+91${formData.phoneNumber}&email=${formData.emailAddress}&start_date=${formData.tripDate}&no_of_days=${formData.days}&no_of_adults=${formData.adults}&no_of_children=${formData.children}&no_of_infant=${formData.infants}&destination=${formData.destination}&Hotelcategory=${formData.hotelCategory}&flexibleDate?=${formData.flexibleDate ? 'Yes' : 'No'}&whatsapp?=${formData.whatsappUpdates ? 'Yes' : 'No'}&Triptheme=${formData.tripTheme}&Guest'slocation=${formData.location}&client_request_uid=${requestId}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: "540|322bbLy0a6LYOEARcsM8z8mSCQ53qq6oZwcZCuUZ72b9651f",
-                    },
-                }
-            );
+            // Call our Next.js API route instead of direct CRM API
+            const response = await fetch('/api/submit-crm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-            const sembarkResponse = await sembark.json();
-            console.log('CRM Response:', sembarkResponse);
+            const result = await response.json();
+            console.log('CRM API Response:', result);
 
-            if (sembark.ok) {
-                setMessage({ type: 'success', text: '🎉 Success! We will contact you soon.' });
+            if (result.success) {
+                setMessage({ type: 'success', text: '🎉 Success! Redirecting...' });
                 setTimeout(() => {
                     onClose();
-                }, 2000);
+                    router.push('/thank-you');
+                }, 1500);
             } else {
                 setMessage({ type: 'error', text: 'Failed to submit. Please try again.' });
             }
