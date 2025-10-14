@@ -123,7 +123,7 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
             const phoneWithCountryCode = `91${formData.phoneNumber}`;
 
             const response = await fetch(
-                `http://api.savshka.co.in/api/sms?key=vxX4y4ui&to=${phoneWithCountryCode}&from=HLDCWD&body=Dear Traveler, Your secure OTP for Holidays Crowd account is ${otp} valid only for 5 minutes.&entityid=1001326296432787407&templateid=1007092667854703158`
+                `https://api.savshka.co.in/api/sms?key=vxX4y4ui&to=${phoneWithCountryCode}&from=HLDCWD&body=Dear Traveler, Your secure OTP for Holidays Crowd account is ${otp} valid only for 5 minutes.&entityid=1001326296432787407&templateid=1007092667854703158`
             );
 
             const result = await response.json();
