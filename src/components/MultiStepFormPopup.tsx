@@ -241,7 +241,18 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
             {/* Modal */}
             <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex">
                 {/* Left Side - Branding */}
-                <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-primary via-secondary to-primary p-12 flex-col justify-between relative overflow-hidden">
+                <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-primary/90 via-secondary/90 to-primary/90 p-12 flex-col justify-between relative overflow-hidden">
+                    {/* Background Image */}
+                    <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: 'url(https://holidayscrowd-assets.imgix.net/24199c3b-aedc-4fde-a465-318d11ee57dd?auto=format%2Ccompress&w=1200&q=90&fm=webp)',
+                        }}
+                    />
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/60 via-secondary/20 to-primary/10" />
+
                     {/* Decorative elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32" />
                     <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full -ml-48 -mb-48" />
