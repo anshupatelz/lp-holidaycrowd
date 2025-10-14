@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import MultiStepFormPopup from './MultiStepFormPopup';
+import Link from 'next/link';
 
 export default function FooterSection() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -348,7 +349,11 @@ export default function FooterSection() {
                                         </div>
                                         <div>
                                             <h4 className="text-white font-light text-sm mb-1 opacity-90">Phone</h4>
-                                            <p className="text-white font-light text-lg">+91 7428027199</p>
+                                            <p className="text-white font-light text-lg">
+                                                <Link href="tel:+918287783891">
+                                                    +91 8287783891
+                                                </Link>
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-start space-x-4">
@@ -360,7 +365,11 @@ export default function FooterSection() {
                                         </div>
                                         <div>
                                             <h4 className="text-white font-light text-sm mb-1 opacity-90">Email</h4>
-                                            <p className="text-white font-light text-lg">care@holidayscrowd.com</p>
+                                            <p className="text-white font-light text-lg">
+                                                <Link href="mailto:support@holidayscrowd.com">
+                                                    support@holidayscrowd.com
+                                                </Link>
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-start space-x-4">

@@ -13,18 +13,29 @@ export default function HeroSection() {
             <section className="relative min-h-screen flex items-end justify-center overflow-hidden">
                 {/* Background Video */}
                 <div className="absolute inset-0 z-0">
-                    <video
-                        className="absolute inset-0 w-full h-full object-cover"
-                        poster="/hero-image.jpg"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
+                    {/* Fallback Background Image */}
+                    <div
+                        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: 'url(/hero-image.jpg)',
+                        }}
+                    />
+
+                    {/* YouTube Video */}
+                    <iframe
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                        style={{
+                            width: '100vw',
+                            height: '100vh',
+                            objectFit: 'cover',
+                            transform: 'scale(1.5)',
+                            transformOrigin: 'center center'
+                        }}
+                        src="https://www.youtube.com/embed/T3SGXIubEE4?autoplay=1&mute=1&loop=1&playlist=T3SGXIubEE4&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+                        title="Bali Background Video"
+                        allow="autoplay; encrypted-media"
                         aria-hidden="true"
-                    >
-                        <source src="/2949519-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-                        {/* Fallback to poster image for browsers that don't support video */}
-                    </video>
+                    />
 
                     {/* Gradient Overlays for better content visibility */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
