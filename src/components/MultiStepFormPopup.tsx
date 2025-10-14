@@ -430,6 +430,7 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
 
                                 {/* Trip Theme */}
                                 <div>
+                                    <h4 className="text-lg font-light text-gray-900 mb-4">What kind of places do you want to explore?</h4>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                         {tripThemes.map((theme) => {
                                             const Icon = theme.icon;
