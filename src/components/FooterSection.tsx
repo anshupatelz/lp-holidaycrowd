@@ -45,17 +45,22 @@ export default function FooterSection() {
             const otp = generateOTP();
             setGeneratedOtp(otp);
 
-            // Format phone number: add 91 prefix (without +)
-            const phoneWithCountryCode = `91${formData.phoneNumber}`;
-
-            const response = await fetch(
-                `https://api.savshka.co.in/api/sms?key=vxX4y4ui&to=${phoneWithCountryCode}&from=HLDCWD&body=Dear Traveler, Your secure OTP for Holidays Crowd account is ${otp} valid only for 5 minutes.&entityid=1001326296432787407&templateid=1007092667854703158`
-            );
+            // Call our Next.js API route instead of direct SMS API
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber: formData.phoneNumber,
+                    otp: otp,
+                }),
+            });
 
             const result = await response.json();
-            console.log('SMS API Response:', result);
+            console.log('OTP API Response:', result);
 
-            if (response.ok && result.status !== 700) {
+            if (result.success) {
                 setOtpSent(true);
                 setMessage({ type: 'success', text: 'OTP sent successfully! Please check your phone.' });
 
@@ -66,7 +71,7 @@ export default function FooterSection() {
                     setMessage({ type: 'error', text: 'OTP expired. Please request a new one.' });
                 }, 5 * 60 * 1000);
             } else {
-                setMessage({ type: 'error', text: `Failed to send OTP: ${result.description || 'Please check your phone number'}` });
+                setMessage({ type: 'error', text: `Failed to send OTP: ${result.message || 'Please check your phone number'}` });
             }
         } catch (error) {
             console.error('Error sending OTP:', error);
@@ -92,39 +97,39 @@ export default function FooterSection() {
         // OTP verified, now submit to CRM
         setIsSubmitting(true);
         try {
-            const requestId = `HC-${Date.now()}`; // Generate unique request ID
-            const phone = formData.phoneNumber;
-            const email = formData.emailAddress;
-            const Fullname = formData.fullName;
-            const location = formData.location;
+            // Prepare form data with default values for required fields
+            const crmData = {
+                fullName: formData.fullName,
+                phoneNumber: formData.phoneNumber,
+                emailAddress: formData.emailAddress,
+                location: formData.location,
+                destination: 'Bali',
+                tripDate: new Date().toISOString().split('T')[0],
+                days: '0',
+                adults: '0',
+                children: '0',
+                infants: '0',
+                hotelCategory: 'Standard',
+                flexibleDate: false,
+                whatsappUpdates: true,
+                tripTheme: 'Leisure',
+                tripType: 'leisure',
+                travelers: '0'
+            };
 
-            // Default values for required fields (you can add more form fields if needed)
-            const tripDate = new Date().toISOString().split('T')[0];
-            const days = '5';
-            const adult = '2';
-            const child = '0';
-            const infant = '0';
-            const destination = 'Bali';
-            const hotelCategoryy = 'Standard';
-            const flexible = 'No';
-            const whatsapp = 'Yes';
-            const tripTheme = 'Leisure';
+            // Call our Next.js API route instead of direct CRM API
+            const response = await fetch('/api/submit-crm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(crmData),
+            });
 
-            const sembark = await fetch(
-                `https://api.sembark.com/integrations/v1/trip-plan-requests?name=${Fullname}&phone_number=+91${phone}&email=${email}&start_date=${tripDate}&no_of_days=${days}&no_of_adults=${adult}&no_of_children=${child}&no_of_infant=${infant}&destination=${destination}&Hotelcategory=${hotelCategoryy}&flexibleDate?=${flexible}&whatsapp?=${whatsapp}&Triptheme=${tripTheme}&Guest'slocation=${location}&client_request_uid=${requestId}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: "540|322bbLy0a6LYOEARcsM8z8mSCQ53qq6oZwcZCuUZ72b9651f",
-                    },
-                }
-            );
+            const result = await response.json();
+            console.log('CRM API Response:', result);
 
-            const sembarkResponse = await sembark.json();
-            console.log('CRM Response:', sembarkResponse);
-
-            if (sembark.ok) {
+            if (result.success) {
                 setMessage({ type: 'success', text: 'Form submitted successfully! We will contact you soon.' });
                 // Reset form
                 setFormData({
