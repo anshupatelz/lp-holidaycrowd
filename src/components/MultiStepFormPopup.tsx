@@ -95,8 +95,63 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    const validateStep = () => {
+        setMessage({ type: '', text: '' });
+
+        if (currentStep === 1) {
+            if (!formData.destination.trim()) {
+                setMessage({ type: 'error', text: 'Please enter a destination.' });
+                return false;
+            }
+            if (!formData.tripType) {
+                setMessage({ type: 'error', text: 'Please select a trip type.' });
+                return false;
+            }
+            if (!formData.tripTheme) {
+                setMessage({ type: 'error', text: 'Please select a trip theme.' });
+                return false;
+            }
+        }
+
+        if (currentStep === 2) {
+            if (!formData.travelers) {
+                setMessage({ type: 'error', text: 'Please select number of travelers.' });
+                return false;
+            }
+            if (!formData.tripDate) {
+                setMessage({ type: 'error', text: 'Please select your travel date.' });
+                return false;
+            }
+            if (!formData.hotelCategory) {
+                setMessage({ type: 'error', text: 'Please select your hotel preference.' });
+                return false;
+            }
+        }
+
+        if (currentStep === 3 && !otpSent) {
+            if (!formData.location.trim()) {
+                setMessage({ type: 'error', text: 'Please enter your location.' });
+                return false;
+            }
+            if (!formData.fullName.trim()) {
+                setMessage({ type: 'error', text: 'Please enter your name.' });
+                return false;
+            }
+            if (!formData.phoneNumber || formData.phoneNumber.length !== 10) {
+                setMessage({ type: 'error', text: 'Please enter a valid 10-digit phone number.' });
+                return false;
+            }
+            if (!formData.emailAddress.trim() || !formData.emailAddress.includes('@')) {
+                setMessage({ type: 'error', text: 'Please enter a valid email address.' });
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     const handleNext = () => {
-        if (currentStep < totalSteps) {
+        if (validateStep() && currentStep < totalSteps) {
             setCurrentStep(currentStep + 1);
         }
     };
@@ -201,8 +256,16 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
 
     const handleSubmit = () => {
         if (!otpSent) {
-            sendOTP();
+            // Validate step 3 fields before sending OTP
+            if (validateStep()) {
+                sendOTP();
+            }
         } else {
+            // Validate OTP before submitting
+            if (!otpValue || otpValue.length !== 6) {
+                setMessage({ type: 'error', text: 'Please enter the 6-digit OTP.' });
+                return;
+            }
             submitToCRM();
         }
     };
