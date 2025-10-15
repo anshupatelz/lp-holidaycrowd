@@ -81,16 +81,18 @@ export default function HeroSection() {
                     />
 
                     {/* YouTube Video Player */}
-                    <div
-                        ref={playerContainerRef}
-                        className="absolute inset-0 w-full h-full pointer-events-none"
-                        style={{
-                            width: '100vw',
-                            height: '100vh',
-                            transform: 'scale(1.5)',
-                            transformOrigin: 'center center',
-                        }}
-                    />
+                    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+                        <div
+                            ref={playerContainerRef}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                            style={{
+                                width: '100vw',
+                                height: '56.25vw', // 16:9 aspect ratio
+                                minHeight: '100vh',
+                                minWidth: '177.77vh', // 16:9 aspect ratio
+                            }}
+                        />
+                    </div>
 
                     {/* Gradient Overlays for better content visibility */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
