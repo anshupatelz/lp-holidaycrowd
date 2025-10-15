@@ -18,81 +18,23 @@ export default function HeroSection() {
     const playerRef = useRef<any>(null);
     const playerContainerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        // Load YouTube IFrame API
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-        // Initialize player when API is ready
-        window.onYouTubeIframeAPIReady = () => {
-            playerRef.current = new window.YT.Player(playerContainerRef.current, {
-                videoId: 'T3SGXIubEE4',
-                playerVars: {
-                    autoplay: 1,
-                    mute: 1,
-                    loop: 1,
-                    playlist: 'T3SGXIubEE4',
-                    controls: 0,
-                    showinfo: 0,
-                    rel: 0,
-                    modestbranding: 1,
-                    iv_load_policy: 3,
-                    disablekb: 1,
-                    fs: 0,
-                    playsinline: 1,
-                },
-                events: {
-                    onReady: (event: any) => {
-                        event.target.mute();
-                        event.target.playVideo();
-                        // Set quality to highest available (hd1080, hd720, etc.)
-                        event.target.setPlaybackQuality('hd1080');
-                    },
-                    onStateChange: (event: any) => {
-                        // Ensure video loops
-                        if (event.data === window.YT.PlayerState.ENDED) {
-                            event.target.playVideo();
-                        }
-                    },
-                },
-            });
-        };
-
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.destroy();
-            }
-        };
-    }, []);
-
     return (
         <>
             <section className="relative min-h-screen flex items-end justify-center overflow-hidden">
                 {/* Background Video */}
                 <div className="absolute inset-0 z-0">
-                    {/* Fallback Background Image */}
-                    <div
-                        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-                        style={{
-                            backgroundImage: 'url(/hero-image.jpg)',
-                        }}
-                    />
-
-                    {/* YouTube Video Player */}
-                    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-                        <div
-                            ref={playerContainerRef}
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                            style={{
-                                width: '100vw',
-                                height: '56.25vw', // 16:9 aspect ratio
-                                minHeight: '100vh',
-                                minWidth: '177.77vh', // 16:9 aspect ratio
-                            }}
-                        />
-                    </div>
+                    <video
+                        className="absolute inset-0 w-full h-full object-cover"
+                        poster="/hero-image.jpg"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        aria-hidden="true"
+                    >
+                        <source src="/bali-hero-section-holidaycrowd-1080p.mp4" type="video/mp4" />
+                        {/* Fallback to poster image for browsers that don't support video */}
+                    </video>
 
                     {/* Gradient Overlays for better content visibility */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
