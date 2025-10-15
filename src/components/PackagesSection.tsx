@@ -44,7 +44,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 68,071/-",
             price: "₹ 56,499",
             discount: "17%",
-            image: "https://holidayscrowd-assets.imgix.net/2b16fac6-2cdd-47cb-ba19-0815d4b3e943?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-package-image-1.webp",
             alt: "Delhi to Bali Tour",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -56,7 +56,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 79,999/-",
             price: "₹ 59,999",
             discount: "25%",
-            image: "https://holidayscrowd-assets.imgix.net/21c5a18a-3a53-4c02-8751-23f048585544?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-package-image-5.webp",
             alt: "Amazing Bali Package",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -68,7 +68,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 33,132/-",
             price: "₹ 27,499",
             discount: "17%",
-            image: "https://holidayscrowd-assets.imgix.net/ca2a5dd0-f54c-4d79-8021-8d185d93aee1?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "https://holidayscrowd-assets.imgix.net/24199c3b-aedc-4fde-a465-318d11ee57dd?auto=format%2Ccompress&w=600&q=85&fm=webp",
             alt: "Sea and Sand Bali",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -80,7 +80,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 87,208/-",
             price: "₹ 74,999",
             discount: "14%",
-            image: "https://holidayscrowd-assets.imgix.net/a62ed373-d4de-45b7-959e-fc68636a0b2b?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "https://holidayscrowd-assets.imgix.net/2bcfe0fb-27af-4709-bef1-8c7e397c0569?auto=format%2Ccompress&w=600&q=85&fm=webp",
             alt: "Bali Honeymoon Package",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -92,7 +92,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 68,181/-",
             price: "₹ 59,999",
             discount: "12%",
-            image: "https://holidayscrowd-assets.imgix.net/c0554687-246c-4481-9056-23057283813e?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "https://holidayscrowd-assets.imgix.net/36ed2945-efe8-4b30-894a-ab56e19987bd?auto=format%2Ccompress&w=600&q=85&fm=webp",
             alt: "Best Bali Tour for Couple",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -104,7 +104,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 47,590/-",
             price: "₹ 39,500",
             discount: "17%",
-            image: "https://holidayscrowd-assets.imgix.net/2bcfe0fb-27af-4709-bef1-8c7e397c0569?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-package-image-4.webp",
             alt: "Unforgettable Bali Tour",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -129,7 +129,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 48,090/-",
             price: "₹ 42,800",
             discount: "11%",
-            image: "https://holidayscrowd-assets.imgix.net/36ed2945-efe8-4b30-894a-ab56e19987bd?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-package-image-7.webp",
             alt: "Ultimate Bali Tour",
             buttonClass: "bg-primary hover:bg-secondary",
             showDiscountBadge: true,
@@ -143,7 +143,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 37,950/-",
             price: "₹ 31,499",
             discount: "17%",
-            image: "https://holidayscrowd-assets.imgix.net/24199c3b-aedc-4fde-a465-318d11ee57dd?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-package-image-9.webp",
             alt: "Bali Tour from Bangalore",
             buttonClass: "bg-primary hover:bg-secondary",
             showDiscountBadge: true,
