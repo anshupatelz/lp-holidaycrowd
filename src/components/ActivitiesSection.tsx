@@ -177,7 +177,7 @@ export default function ActivitiesSection() {
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button
                                     onClick={() => setIsPopupOpen(true)}
-                                    className="bg-primary text-white px-8 py-4 rounded-full font-light text-lg hover:bg-secondary transition-all duration-300 shadow-sm">
+                                    className="bg-primary text-white px-8 py-4 rounded-full font-light text-lg hover:bg-secondary transition-all duration-300 shadow-sm cursor-pointer">
                                     Know More About Bali
                                 </button>
                             </div>

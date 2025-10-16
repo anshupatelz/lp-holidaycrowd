@@ -6,7 +6,7 @@ export default function WhyChooseUsSection() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     function handleCallClick() {
-        window.location.href = 'tel:+917428027199';
+        window.location.href = 'tel:+918287783891';
     }
 
     return (
@@ -207,12 +207,12 @@ export default function WhyChooseUsSection() {
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button
                                     onClick={() => setIsPopupOpen(true)}
-                                    className="bg-primary text-white px-8 py-4 rounded-full font-light text-lg hover:bg-secondary transition-all duration-300 shadow-sm">
+                                    className="bg-primary text-white px-8 py-4 rounded-full font-light text-lg hover:bg-secondary transition-all duration-300 shadow-sm cursor-pointer">
                                     Get Custom Quote
                                 </button>
                                 <button
                                     onClick={handleCallClick}
-                                    className="border-2 border-primary text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-primary hover:text-white transition-all duration-300">
+                                    className="border-2 border-primary text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer">
                                     Call Us Now
                                 </button>
                             </div>

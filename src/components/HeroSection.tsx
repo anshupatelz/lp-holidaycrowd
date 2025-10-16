@@ -57,7 +57,7 @@ export default function HeroSection() {
                         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                             <button
                                 onClick={() => setIsPopupOpen(true)}
-                                className="bg-white/95 text-primary px-10 py-4 rounded-full font-light text-base hover:bg-white transition-all duration-300 shadow-sm backdrop-blur-sm">
+                                className="bg-white/95 text-primary px-10 py-4 rounded-full font-light text-base hover:bg-white transition-all duration-300 shadow-sm backdrop-blur-sm cursor-pointer">
                                 Explore Bali
                             </button>
                         </div>

@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import MultiStepFormPopup from './MultiStepFormPopup';
 import Link from 'next/link';
 
 export default function FooterSection() {
+    const router = useRouter();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -130,17 +132,10 @@ export default function FooterSection() {
             console.log('CRM API Response:', result);
 
             if (result.success) {
-                setMessage({ type: 'success', text: 'Form submitted successfully! We will contact you soon.' });
-                // Reset form
-                setFormData({
-                    fullName: '',
-                    phoneNumber: '',
-                    emailAddress: '',
-                    location: ''
-                });
-                setOtpValue('');
-                setOtpSent(false);
-                setGeneratedOtp('');
+                setMessage({ type: 'success', text: '🎉 Success! Redirecting...' });
+                setTimeout(() => {
+                    router.push('/thank-you');
+                }, 1500);
             } else {
                 setMessage({ type: 'error', text: 'Failed to submit form. Please try again.' });
             }
@@ -297,7 +292,7 @@ export default function FooterSection() {
                                                     setOtpValue('');
                                                     setMessage({ type: '', text: '' });
                                                 }}
-                                                className="ml-1 underline hover:text-white"
+                                                className="ml-1 underline hover:text-white cursor-pointer font-medium"
                                             >
                                                 Resend OTP
                                             </button>
@@ -308,7 +303,7 @@ export default function FooterSection() {
                                 <button
                                     type="submit"
                                     disabled={isSending || isVerifying || isSubmitting}
-                                    className="w-full bg-white text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-white/90 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full bg-white text-primary px-8 py-4 rounded-full font-light text-lg hover:bg-white/90 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                 >
                                     {isSending
                                         ? 'Sending OTP...'
@@ -333,7 +328,7 @@ export default function FooterSection() {
                                 <button
                                     type="button"
                                     onClick={() => setIsPopupOpen(true)}
-                                    className="w-full bg-white/10 text-white px-8 py-4 rounded-full font-light text-lg hover:bg-white/20 transition-all duration-300 border border-white/20"
+                                    className="w-full bg-white/10 text-white px-8 py-4 rounded-full font-light text-lg hover:bg-white/20 transition-all duration-300 border border-white/20 cursor-pointer"
                                 >
                                     Plan Your Custom Trip →
                                 </button>
@@ -416,9 +411,11 @@ export default function FooterSection() {
                                 <p className="text-white/90 font-light mb-6 leading-relaxed">
                                     Traveling with peace of mind. Our emergency support team is available round the clock during your trip.
                                 </p>
-                                <button className="bg-white/10 text-white px-6 py-3 rounded-full font-light hover:bg-white/20 transition-all duration-300 border border-white/20">
-                                    Emergency Hotline
-                                </button>
+                                <Link href="tel:+918287783891">
+                                    <button className="bg-white/10 text-white px-6 py-3 rounded-full font-light hover:bg-white/20 transition-all duration-300 border border-white/ cursor-pointer">
+                                        Emergency Hotline
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -212,7 +212,7 @@ export default function PackagesSection() {
                                             </div>
                                             <button
                                                 onClick={() => setIsPopupOpen(true)}
-                                                className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                                className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 cursor-pointer group-hover:shadow-lg ${pkg.buttonClass}`}>
                                                 Enquire Now
                                             </button>
                                         </div>
@@ -284,7 +284,7 @@ export default function PackagesSection() {
                                 </div>
                                 <button
                                     onClick={() => setIsPopupOpen(true)}
-                                    className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                    className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 cursor-pointer group-hover:shadow-lg ${pkg.buttonClass}`}>
                                     Enquire Now
                                 </button>
                             </div>
@@ -296,7 +296,7 @@ export default function PackagesSection() {
                 <div className="text-center mt-12">
                     <button
                         onClick={() => setIsPopupOpen(true)}
-                        className="bg-white border-2 border-primary text-primary px-8 py-3 rounded-full font-light hover:bg-primary hover:text-white transition-all duration-300 shadow-sm">
+                        className="bg-white border-2 border-primary text-primary px-8 py-3 rounded-full font-light hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer">
                         Book A Trip
                     </button>
                 </div>
