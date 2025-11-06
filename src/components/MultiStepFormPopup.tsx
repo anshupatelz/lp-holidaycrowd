@@ -48,7 +48,7 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
         children: '0',
         infants: '0',
         tripDate: '',
-        days: '4',
+        days: '6',
         flexibleDate: false,
         hotelCategory: '',
         location: '',
@@ -495,23 +495,17 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
 
                                     <div>
                                         <label className="block text-sm font-light text-gray-700 mb-2">Your Trip Duration</label>
-                                        <div className="flex items-center bg-gray-50 border border-gray-200 rounded-2xl">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleInputChange('days', String(Math.max(1, parseInt(formData.days) - 1)))}
-                                                className="px-4 py-4 text-gray-600 hover:text-primary transition-colors"
-                                            >
-                                                −
-                                            </button>
-                                            <div className="flex-1 text-center font-light">{formData.days} Days</div>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleInputChange('days', String(parseInt(formData.days) + 1))}
-                                                className="px-4 py-4 text-gray-600 hover:text-primary transition-colors"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
+                                        <select
+                                            value={formData.days}
+                                            onChange={(e) => handleInputChange('days', e.target.value)}
+                                            className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 appearance-none"
+                                        >
+                                            <option value="6">6 Days</option>
+                                            <option value="7">7 Days</option>
+                                            <option value="8">8 Days</option>
+                                            <option value="9">9 Days</option>
+                                            <option value="10">10 Days</option>
+                                        </select>
                                     </div>
                                 </div>
 
