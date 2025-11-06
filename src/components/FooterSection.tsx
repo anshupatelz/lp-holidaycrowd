@@ -350,8 +350,8 @@ export default function FooterSection() {
                                         <div>
                                             <h4 className="text-white font-light text-sm mb-1 opacity-90">Phone</h4>
                                             <p className="text-white font-light text-lg">
-                                                <Link href="tel:+918287783891">
-                                                    +91 8287783891
+                                                <Link href="tel:+919958264359">
+                                                    +91 9958264359
                                                 </Link>
                                             </p>
                                         </div>
@@ -411,7 +411,7 @@ export default function FooterSection() {
                                 <p className="text-white/90 font-light mb-6 leading-relaxed">
                                     Traveling with peace of mind. Our emergency support team is available round the clock during your trip.
                                 </p>
-                                <Link href="tel:+918287783891">
+                                <Link href="tel:+919958264359">
                                     <button className="bg-white/10 text-white px-6 py-3 rounded-full font-light hover:bg-white/20 transition-all duration-300 border border-white/ cursor-pointer">
                                         Emergency Hotline
                                     </button>

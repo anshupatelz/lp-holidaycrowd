@@ -6,7 +6,7 @@ export default function WhyChooseUsSection() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     function handleCallClick() {
-        window.location.href = 'tel:+918287783891';
+        window.location.href = 'tel:+919958264359';
     }
 
     return (
