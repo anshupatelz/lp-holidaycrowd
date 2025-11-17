@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import MultiStepFormPopup from './MultiStepFormPopup';
 import Link from 'next/link';
@@ -13,7 +13,13 @@ export default function FooterSection() {
         fullName: '',
         phoneNumber: '',
         emailAddress: '',
-        location: ''
+        location: '',
+        utm_source: '',
+        utm_campaign: '',
+        utm_adgroup: '',
+        utm_ad: '',
+        utm_keyword: '',
+        page_url: '',
     });
 
     const [otpSent, setOtpSent] = useState(false);
@@ -23,6 +29,24 @@ export default function FooterSection() {
     const [isSending, setIsSending] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+
+    // Extract UTM parameters from URL on mount
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageUrl = window.location.href;
+
+            setFormData(prev => ({
+                ...prev,
+                utm_source: urlParams.get('utm_source') || '',
+                utm_campaign: urlParams.get('utm_campaign') || '',
+                utm_adgroup: urlParams.get('utm_adgroup') || '',
+                utm_ad: urlParams.get('utm_ad') || '',
+                utm_keyword: urlParams.get('utm_keyword') || '',
+                page_url: pageUrl,
+            }));
+        }
+    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -116,7 +140,13 @@ export default function FooterSection() {
                 whatsappUpdates: true,
                 tripTheme: 'Leisure',
                 tripType: 'leisure',
-                travelers: '0'
+                travelers: '0',
+                utm_source: formData.utm_source,
+                utm_campaign: formData.utm_campaign,
+                utm_adgroup: formData.utm_adgroup,
+                utm_ad: formData.utm_ad,
+                utm_keyword: formData.utm_keyword,
+                page_url: formData.page_url,
             };
 
             // Call our Next.js API route instead of direct CRM API

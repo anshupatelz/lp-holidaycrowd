@@ -29,6 +29,14 @@ interface FormData {
     phoneNumber: string;
     emailAddress: string;
     whatsappUpdates: boolean;
+
+    // UTM Parameters & Tracking
+    utm_source: string;
+    utm_campaign: string;
+    utm_adgroup: string;
+    utm_ad: string;
+    utm_keyword: string;
+    page_url: string;
 }
 
 interface MultiStepFormPopupProps {
@@ -56,6 +64,12 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
         phoneNumber: '',
         emailAddress: '',
         whatsappUpdates: true,
+        utm_source: '',
+        utm_campaign: '',
+        utm_adgroup: '',
+        utm_ad: '',
+        utm_keyword: '',
+        page_url: '',
     });
 
     const [otpSent, setOtpSent] = useState(false);
@@ -65,6 +79,24 @@ export default function MultiStepFormPopup({ isOpen, onClose }: MultiStepFormPop
     const [message, setMessage] = useState({ type: '', text: '' });
 
     const totalSteps = 3;
+
+    // Extract UTM parameters from URL on mount
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageUrl = window.location.href;
+
+            setFormData(prev => ({
+                ...prev,
+                utm_source: urlParams.get('utm_source') || '',
+                utm_campaign: urlParams.get('utm_campaign') || '',
+                utm_adgroup: urlParams.get('utm_adgroup') || '',
+                utm_ad: urlParams.get('utm_ad') || '',
+                utm_keyword: urlParams.get('utm_keyword') || '',
+                page_url: pageUrl,
+            }));
+        }
+    }, []);
 
     // Reset form when popup closes
     useEffect(() => {
