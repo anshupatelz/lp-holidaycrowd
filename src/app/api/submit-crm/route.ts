@@ -67,9 +67,6 @@ export async function POST(request: NextRequest) {
                 // const sheetsWebhook = process.env.SHEETS_WEBHOOK_URL;
                 const sheetsWebhook = 'https://script.google.com/macros/s/AKfycbysIHxz_I7Q4FjOzMpJVTgsJ_B-qudl7nl8YY_zpJpxAOCpjuxH2Zlii2_EGdv4KyEJkQ/exec';
                 if (sheetsWebhook) {
-                    const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 3000); // 3s timeout so it won't block
-
                     const sheetPayload = {
                         client_request_uid: requestId,
                         name: formData.fullName || '',
@@ -96,22 +93,26 @@ export async function POST(request: NextRequest) {
                         page_url: formData.page_url || '',
                     };
 
-                    // Fire and forget with a short timeout; errors won't block CRM response
-                    fetch(sheetsWebhook, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(sheetPayload),
-                        signal: controller.signal,
-                    }).then(async res => {
-                        clearTimeout(timeout);
-                        const responseText = await res.text();
-                        console.log('Sheets webhook response status:', res.status);
-                        console.log('Sheets webhook response body:', responseText);
-                        if (!res.ok) {
-                            console.error('Sheets webhook failed with status:', res.status);
-                        }
-                    }).catch(err => {
-                        clearTimeout(timeout);
+                    // AWAIT the Google Sheets call so Vercel doesn't terminate before it completes
+                    // Use a Promise.race to enforce timeout
+                    await Promise.race([
+                        fetch(sheetsWebhook, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(sheetPayload),
+                        }).then(async res => {
+                            const responseText = await res.text();
+                            console.log('Sheets webhook response status:', res.status);
+                            console.log('Sheets webhook response body:', responseText);
+                            if (!res.ok) {
+                                console.error('Sheets webhook failed with status:', res.status);
+                            }
+                            return res;
+                        }),
+                        new Promise((_, reject) =>
+                            setTimeout(() => reject(new Error('Sheets webhook timeout')), 5000)
+                        )
+                    ]).catch(err => {
                         console.warn('Sheets webhook error (ignored):', err?.message || err);
                     });
                 }
