@@ -61,6 +61,64 @@ export async function POST(request: NextRequest) {
         console.log('CRM Response:', result);
 
         if (response.ok) {
+            // Attempt to forward a copy of the lead to Google Sheets webhook (optional)
+            // Configure `SHEETS_WEBHOOK_URL` in your environment with the Apps Script Web App URL
+            try {
+                // const sheetsWebhook = process.env.SHEETS_WEBHOOK_URL;
+                const sheetsWebhook = 'https://script.google.com/macros/s/AKfycbysIHxz_I7Q4FjOzMpJVTgsJ_B-qudl7nl8YY_zpJpxAOCpjuxH2Zlii2_EGdv4KyEJkQ/exec';
+                if (sheetsWebhook) {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 3000); // 3s timeout so it won't block
+
+                    const sheetPayload = {
+                        client_request_uid: requestId,
+                        name: formData.fullName || '',
+                        phone_number: `+91${formData.phoneNumber || ''}`,
+                        email: formData.emailAddress || '',
+                        location: formData.location || '',
+                        destination: formData.destination || '',
+                        start_date: formData.tripDate || '',
+                        no_of_days: formData.days || '',
+                        no_of_adults: formData.adults || '',
+                        no_of_children: formData.children || '',
+                        no_of_infant: formData.infants || '',
+                        hotel_category: formData.hotelCategory || '',
+                        flexible_date: formData.flexibleDate ? 'Yes' : 'No',
+                        whatsapp: formData.whatsappUpdates ? 'Yes' : 'No',
+                        trip_theme: formData.tripTheme || '',
+                        trip_type: formData.tripType || '',
+                        travelers: formData.travelers || '',
+                        utm_source: formData.utm_source || '',
+                        utm_campaign: formData.utm_campaign || '',
+                        utm_adgroup: formData.utm_adgroup || '',
+                        utm_ad: formData.utm_ad || '',
+                        utm_keyword: formData.utm_keyword || '',
+                        page_url: formData.page_url || '',
+                    };
+
+                    // Fire and forget with a short timeout; errors won't block CRM response
+                    fetch(sheetsWebhook, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(sheetPayload),
+                        signal: controller.signal,
+                    }).then(async res => {
+                        clearTimeout(timeout);
+                        const responseText = await res.text();
+                        console.log('Sheets webhook response status:', res.status);
+                        console.log('Sheets webhook response body:', responseText);
+                        if (!res.ok) {
+                            console.error('Sheets webhook failed with status:', res.status);
+                        }
+                    }).catch(err => {
+                        clearTimeout(timeout);
+                        console.warn('Sheets webhook error (ignored):', err?.message || err);
+                    });
+                }
+            } catch (err) {
+                console.warn('Error attempting to call sheets webhook (ignored):', err);
+            }
+
             return NextResponse.json({
                 success: true,
                 message: 'Trip request submitted successfully',
