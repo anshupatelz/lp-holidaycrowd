@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
             // Configure `SHEETS_WEBHOOK_URL` in your environment with the Apps Script Web App URL
             try {
                 // const sheetsWebhook = process.env.SHEETS_WEBHOOK_URL;
-                const sheetsWebhook = 'https://script.google.com/macros/s/AKfycbysIHxz_I7Q4FjOzMpJVTgsJ_B-qudl7nl8YY_zpJpxAOCpjuxH2Zlii2_EGdv4KyEJkQ/exec';
+                const sheetsWebhook = 'https://script.google.com/macros/s/AKfycbwsSsK1vpaGu1l4Q1EzJ0zqSOcGzSmkHJ1yPjd2_BVQsPk0UQn0sgsuG1yc5T7NNA1YrA/exec';
                 if (sheetsWebhook) {
                     const sheetPayload = {
                         client_request_uid: requestId,
