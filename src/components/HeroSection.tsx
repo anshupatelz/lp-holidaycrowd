@@ -58,7 +58,7 @@ export default function HeroSection() {
                             <button
                                 onClick={() => setIsPopupOpen(true)}
                                 className="bg-white/95 text-primary px-10 py-4 rounded-full font-light text-base hover:bg-white transition-all duration-300 shadow-sm backdrop-blur-sm cursor-pointer">
-                                Explore Bali
+                                Get Trip Details
                             </button>
                         </div>
                     </div>

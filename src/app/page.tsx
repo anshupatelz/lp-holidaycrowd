@@ -15,6 +15,7 @@ import FAQSection from "@/components/FAQSection";
 import FooterSection from "@/components/FooterSection";
 import MultiStepFormPopup from "@/components/MultiStepFormPopup";
 import FloatingCtaButtons from "@/components/FloatingCtaButtons";
+import StickyCtaButton from "@/components/StickyCtaButton";
 
 export default function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function Home() {
   return (
     <div>
       <FloatingNavigation />
-      <FloatingCtaButtons />
+      {/* <FloatingCtaButtons /> */}
       <HeroSection />
       <StatsSection />
       <PackagesSection />
@@ -33,6 +34,9 @@ export default function Home() {
       <TestimonialsSection />
       <FAQSection />
       <FooterSection />
+
+      {/* Sticky Bottom CTA */}
+      <StickyCtaButton onClick={() => setIsPopupOpen(true)} />
 
       {/* Multi-Step Form Popup */}
       <MultiStepFormPopup

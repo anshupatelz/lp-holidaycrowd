@@ -79,7 +79,7 @@ export default function FloatingNavigation() {
                         <button
                             onClick={() => setIsPopupOpen(true)}
                             className="bg-primary/90 text-white px-7 py-2 rounded-full font-light text-sm hover:bg-primary transition-all duration-300 ml-6 whitespace-nowrap cursor-pointer">
-                            Book Now
+                            Request a Call Back
                         </button>
                     </div>
 
@@ -136,7 +136,7 @@ export default function FloatingNavigation() {
                                     setIsPopupOpen(true);
                                 }}
                                 className="bg-primary text-white px-6 py-3 rounded-full font-light text-sm hover:bg-secondary transition-all duration-300 w-full">
-                                Book Now
+                                Request a Call Back
                             </button>
                         </div>
                     </div>
