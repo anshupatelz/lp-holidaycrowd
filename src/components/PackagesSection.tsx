@@ -46,7 +46,8 @@ export default function PackagesSection() {
             discount: "17%",
             image: "/package-img/bali-package-image-1.webp",
             alt: "Delhi to Bali Tour",
-            buttonClass: "bg-primary hover:bg-secondary"
+            buttonClass: "bg-primary hover:bg-secondary",
+            badge: "Bestselling"
         },
         {
             title: "Amazing 5 Nights Delhi To Bali Indonesia Package",
@@ -58,7 +59,8 @@ export default function PackagesSection() {
             discount: "25%",
             image: "/package-img/bali-package-image-5.webp",
             alt: "Amazing Bali Package",
-            buttonClass: "bg-primary hover:bg-secondary"
+            buttonClass: "bg-primary hover:bg-secondary",
+            badge: "Bestselling"
         },
         {
             title: "Sea and Sand 6 Nights Bali Tour Packages from Delhi",
@@ -68,7 +70,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 33,132/-",
             price: "₹ 27,499",
             discount: "17%",
-            image: "https://holidayscrowd-assets.imgix.net/24199c3b-aedc-4fde-a465-318d11ee57dd?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/sea-and-sand-nights-bali-tour-package.jpg",
             alt: "Sea and Sand Bali",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -80,9 +82,10 @@ export default function PackagesSection() {
             originalPrice: "₹ 87,208/-",
             price: "₹ 74,999",
             discount: "14%",
-            image: "https://holidayscrowd-assets.imgix.net/2bcfe0fb-27af-4709-bef1-8c7e397c0569?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/bali-honeymoon-guided-package.jpg",
             alt: "Bali Honeymoon Package",
-            buttonClass: "bg-primary hover:bg-secondary"
+            buttonClass: "bg-primary hover:bg-secondary",
+            badge: "Bestselling"
         },
         {
             title: "Best Bali Tour Packages for Couple",
@@ -92,7 +95,7 @@ export default function PackagesSection() {
             originalPrice: "₹ 68,181/-",
             price: "₹ 59,999",
             discount: "12%",
-            image: "https://holidayscrowd-assets.imgix.net/36ed2945-efe8-4b30-894a-ab56e19987bd?auto=format%2Ccompress&w=600&q=85&fm=webp",
+            image: "/package-img/best-bali-tour-packages-for-couple.png",
             alt: "Best Bali Tour for Couple",
             buttonClass: "bg-primary hover:bg-secondary"
         },
@@ -119,7 +122,6 @@ export default function PackagesSection() {
             image: "https://holidayscrowd-assets.imgix.net/38077d87-dc36-435e-87f5-6b8f2a10e76e?auto=format%2Ccompress&w=600&q=85&fm=webp",
             alt: "Refreshing Bali Package",
             buttonClass: "bg-primary hover:bg-secondary",
-            showDiscountBadge: true
         },
         {
             title: "The Ultimate Bali Tour Package",
@@ -132,8 +134,6 @@ export default function PackagesSection() {
             image: "/package-img/bali-package-image-7.webp",
             alt: "Ultimate Bali Tour",
             buttonClass: "bg-primary hover:bg-secondary",
-            showDiscountBadge: true,
-            discountBadgeText: "11% OFF"
         },
         {
             title: "Exciting Bali Tour Packages from Bangalore",
@@ -146,8 +146,6 @@ export default function PackagesSection() {
             image: "/package-img/bali-package-image-9.webp",
             alt: "Bali Tour from Bangalore",
             buttonClass: "bg-primary hover:bg-secondary",
-            showDiscountBadge: true,
-            discountBadgeText: "17% OFF"
         }
     ];
 
@@ -165,12 +163,121 @@ export default function PackagesSection() {
                     </p>
                 </div>
 
-                {/* Mobile Carousel (visible on mobile) */}
+                {/* Desktop Grid (hidden on mobile) */}
+                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {packages.map((pkg, index) => (
+                        <div
+                            key={index}
+                            className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
+                            <div className="relative">
+                                <Image
+                                    src={pkg.image}
+                                    alt={pkg.alt}
+                                    width={800}
+                                    height={600}
+                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                {pkg.badge && (
+                                    <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                        {pkg.badge}
+                                    </div>
+                                )}
+                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
+                                    {pkg.duration}
+                                </div>
+                            </div>
+                            <div className="p-6">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center space-x-1">
+                                        <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                        </svg>
+                                        <span className="text-sm font-medium text-gray-700">{pkg.rating}</span>
+                                        <span className="text-xs text-gray-500">• Bali</span>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-medium text-primary mb-3 leading-tight">{pkg.title}</h3>
+                                <div className="mb-3">
+                                    <div className="flex items-baseline gap-2 mb-1">
+                                        <span className="text-sm text-gray-500 line-through">{pkg.originalPrice}</span>
+                                        <span className="bg-green-500 text-white text-xs font-medium px-2 py-0.5 rounded">{pkg.discount} off</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-2xl font-light text-primary">{pkg.price}</span>
+                                        <span className="text-sm text-gray-500">/ {pkg.days}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setIsPopupOpen(true)}
+                                    className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 cursor-pointer group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                    Enquire Now
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Mobile View (visible on mobile) */}
                 <div className="lg:hidden mb-8">
+                    {/* Bestselling Packages Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        {packages.filter(pkg => pkg.badge === "Bestselling").map((pkg, index) => (
+                            <div
+                                key={`bestselling-${index}`}
+                                className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
+                                <div className="relative">
+                                    <Image
+                                        src={pkg.image}
+                                        alt={pkg.alt}
+                                        width={800}
+                                        height={600}
+                                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    {pkg.badge && (
+                                        <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                            {pkg.badge}
+                                        </div>
+                                    )}
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
+                                        {pkg.duration}
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center space-x-1">
+                                            <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                            </svg>
+                                            <span className="text-sm font-medium text-gray-700">{pkg.rating}</span>
+                                            <span className="text-xs text-gray-500">• Bali</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-lg font-medium text-primary mb-3 leading-tight">{pkg.title}</h3>
+                                    <div className="mb-3">
+                                        <div className="flex items-baseline gap-2 mb-1">
+                                            <span className="text-sm text-gray-500 line-through">{pkg.originalPrice}</span>
+                                            <span className="bg-green-500 text-white text-xs font-medium px-2 py-0.5 rounded">{pkg.discount} off</span>
+                                        </div>
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-2xl font-light text-primary">{pkg.price}</span>
+                                            <span className="text-sm text-gray-500">/ {pkg.days}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsPopupOpen(true)}
+                                        className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 cursor-pointer group-hover:shadow-lg ${pkg.buttonClass}`}>
+                                        Enquire Now
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Other Packages Carousel */}
                     <div className="overflow-hidden -mx-4" ref={emblaRef}>
                         <div className="flex touch-pan-y">
-                            {packages.map((pkg, index) => (
-                                <div key={index} className="flex-[0_0_100%] min-w-0 px-4">
+                            {packages.filter(pkg => !pkg.badge || pkg.badge !== "Bestselling").map((pkg, index) => (
+                                <div key={`carousel-${index}`} className="flex-[0_0_100%] min-w-0 px-4">
                                     <div className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
                                         <div className="relative">
                                             <Image
@@ -180,9 +287,9 @@ export default function PackagesSection() {
                                                 height={600}
                                                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
-                                            {pkg.showDiscountBadge && (
+                                            {pkg.badge && (
                                                 <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                                                    {pkg.discountBadgeText || `${pkg.discount} off`}
+                                                    {pkg.badge}
                                                 </div>
                                             )}
                                             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
@@ -236,60 +343,6 @@ export default function PackagesSection() {
                             />
                         ))}
                     </div>
-                </div>
-
-                {/* Desktop Grid (hidden on mobile) */}
-                <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {packages.map((pkg, index) => (
-                        <div
-                            key={index}
-                            className="group bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-100">
-                            <div className="relative">
-                                <Image
-                                    src={pkg.image}
-                                    alt={pkg.alt}
-                                    width={800}
-                                    height={600}
-                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                                {pkg.showDiscountBadge && (
-                                    <div className="absolute top-4 left-4 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                                        {pkg.discountBadgeText || `${pkg.discount} off`}
-                                    </div>
-                                )}
-                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-3 py-1 rounded-full">
-                                    {pkg.duration}
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center space-x-1">
-                                        <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                                        </svg>
-                                        <span className="text-sm font-medium text-gray-700">{pkg.rating}</span>
-                                        <span className="text-xs text-gray-500">• Bali</span>
-                                    </div>
-                                </div>
-                                <h3 className="text-lg font-medium text-primary mb-3 leading-tight">{pkg.title}</h3>
-                                <div className="mb-3">
-                                    <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="text-sm text-gray-500 line-through">{pkg.originalPrice}</span>
-                                        <span className="bg-green-500 text-white text-xs font-medium px-2 py-0.5 rounded">{pkg.discount} off</span>
-                                    </div>
-                                    <div className="flex items-baseline gap-1">
-                                        <span className="text-2xl font-light text-primary">{pkg.price}</span>
-                                        <span className="text-sm text-gray-500">/ {pkg.days}</span>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => setIsPopupOpen(true)}
-                                    className={`w-full text-white py-3 px-6 rounded-full font-light transition-all duration-300 cursor-pointer group-hover:shadow-lg ${pkg.buttonClass}`}>
-                                    Enquire Now
-                                </button>
-                            </div>
-                        </div>
-                    ))}
                 </div>
 
                 {/* Show More Button */}
